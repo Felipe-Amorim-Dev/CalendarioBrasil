@@ -7,12 +7,14 @@ using CalendarioBrasil.Domain.Services;
 using CalendarioBrasil.Domain.ValueObjects;
 using CalendarioBrasil.Infrastructure.Calendarios.Models;
 using CalendarioBrasil.Infrastructure.Calendarios.Regras;
+using CalendarioBrasil.Infrastructure.Calendarios.Validacoes;
 
 namespace CalendarioBrasil.Infrastructure.Calendarios
 {
     public sealed class GeradorFeriadosEstaduais : IGeradorFeriadosEstaduais
     {
         private const string PrefixoRecursos = "CalendarioBrasil.Infrastructure.Catalogos.Estaduais.";
+        private readonly IReadOnlyDictionary<string, AuditoriaEstadualJson?> _auditorias;
 
         private static readonly HashSet<string> UfsBrasileiras = new(StringComparer.Ordinal)
         {
@@ -33,7 +35,10 @@ namespace CalendarioBrasil.Infrastructure.Calendarios
         public GeradorFeriadosEstaduais(CalculadoraDatasMoveis calculadora)
         {
             _calculadora = calculadora ?? throw new ArgumentNullException(nameof(calculadora));
-            _catalogos = CarregarCatalogos();
+
+            var auditorias = new Dictionary<string, AuditoriaEstadualJson?>(StringComparer.Ordinal);
+            _catalogos = CarregarCatalogos(auditorias);
+            _auditorias = auditorias;
         }
 
         public IReadOnlyList<string> ObterUfsDisponiveis()
@@ -71,9 +76,14 @@ namespace CalendarioBrasil.Infrastructure.Calendarios
             return feriados.OrderBy(feriado => feriado.Data).ThenBy(feriado => feriado.Codigo).ToArray();
         }
 
-        public DiagnosticoCatalogoEstadual ObterDiagnostico(string uf)
+        public DiagnosticoCatalogoEstadual ObterDiagnostico(string uf, int? ano = null)
         {
             ArgumentException.ThrowIfNullOrWhiteSpace(uf);
+
+            if (ano.HasValue)
+            {
+                _ = new AnoCalendario(ano.Value);
+            }
 
             var ufNormalizada = uf.Trim().ToUpperInvariant();
 
@@ -82,31 +92,48 @@ namespace CalendarioBrasil.Infrastructure.Calendarios
                 throw new ArgumentException($"A UF {ufNormalizada} não possui catálogo disponível.", nameof(uf));
             }
 
+            _auditorias.TryGetValue(ufNormalizada, out var auditoria);
+
             var vigenciasPendentes = regras.Where(regra => !regra.VigenciaInicio.HasValue).Select(regra => regra.Codigo).OrderBy(codigo => codigo, StringComparer.Ordinal).ToArray();
 
-            var limitacoes = new List<string>
+            bool revisaoAprovada = auditoria?.Situacao == "Aprovada";
+            bool anoValidado = ano.HasValue && auditoria?.AnoInicialValidado <= ano.Value && auditoria?.AnoFinalValidado >= ano.Value;
+            bool homologado = revisaoAprovada && anoValidado && regras.Count > 0 && vigenciasPendentes.Length == 0;
+
+            var situacao = regras.Count == 0 ? "SemRegrasCadastradas" : auditoria?.Situacao switch
             {
-                "A revisão jurídica do catálogo estadual ainda não foi concluída.",
-                "A disponibilidade técnica do catálogo não garante que todos os feriados estaduais tenham sido cadastrados.",
-                "O calendário não contempla feriados municipais."
+                "EmRevisao" => "EmRevisao",
+                "Aprovada" => "Aprovada",
+                _ => "PendenteRevisao"
             };
+
+            var limitacoes = new List<string>();
 
             if (regras.Count == 0)
             {
-                limitacoes.Add("Não existem regras estaduais cadastradas. Isso não comprova a inexistência de feriados.");
+                limitacoes.Add("Não existem regras estaduais cadastradas. Isso não comprova ausência de feriados.");
             }
 
             if (vigenciasPendentes.Length > 0)
             {
-                limitacoes.Add("Existem regras com vigência legal não confirmada; suas datas futuras são projeções.");
+                limitacoes.Add("Existem regras cuja vigência legal ainda não foi confirmada.");
             }
 
-            var situacao = regras.Count == 0 ? "SemRegrasCadastradas" : "PendenteRevisao";
+            if (!revisaoAprovada)
+            {
+                limitacoes.Add("A revisão jurídica do catálogo ainda não foi aprovada.");
+            }
+            else if (!anoValidado)
+            {
+                limitacoes.Add("O ano solicitado não está dentro do intervalo validado ou não foi informado.");
+            }
 
-            return new DiagnosticoCatalogoEstadual(ufNormalizada, regras.Count, situacao, false, vigenciasPendentes, limitacoes);
+            limitacoes.Add("A revisão estadual não abrange automaticamente feriados municipais ou alterações legais posteriores.");
+
+            return new DiagnosticoCatalogoEstadual(ufNormalizada, regras.Count, situacao, homologado, vigenciasPendentes, limitacoes, ano, auditoria?.AnoInicialValidado, auditoria?.AnoFinalValidado, auditoria?.DataRevisao, auditoria?.Responsavel, auditoria?.FontesPorCodigo);
         }
 
-        private static IReadOnlyDictionary<string, IReadOnlyList<RegraFeriadoEstadual>> CarregarCatalogos()
+        private static IReadOnlyDictionary<string, IReadOnlyList<RegraFeriadoEstadual>> CarregarCatalogos(Dictionary<string, AuditoriaEstadualJson?> auditorias)
         {
             var assembly = typeof(GeradorFeriadosEstaduais).Assembly;
             var recursos = assembly.GetManifestResourceNames()
@@ -167,6 +194,7 @@ namespace CalendarioBrasil.Infrastructure.Calendarios
                     };
 
                     regras.Add(regra);
+                    
                 }
 
                 if (regras.GroupBy(regra => regra.Codigo, StringComparer.Ordinal).Any(grupo => grupo.Count() > 1))
@@ -174,10 +202,14 @@ namespace CalendarioBrasil.Infrastructure.Calendarios
                     throw new InvalidDataException($"Existem códigos duplicados no catálogo {recurso}.");
                 }
 
+                ValidadorAuditoriaEstadual.Validar(catalogo.Auditoria, regras, ufArquivo);
+
                 if (!catalogos.TryAdd(ufArquivo, regras.AsReadOnly()))
                 {
                     throw new InvalidDataException($"Catálogo duplicado para a UF {ufArquivo}.");
                 }
+
+                auditorias.Add(ufArquivo, catalogo.Auditoria);
             }
 
             return catalogos;

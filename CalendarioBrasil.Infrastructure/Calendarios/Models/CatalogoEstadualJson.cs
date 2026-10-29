@@ -8,5 +8,6 @@ namespace CalendarioBrasil.Infrastructure.Calendarios.Models
     {
         public required string Uf { get; init; }
         public required List<RegraEstadualJson> Feriados { get; init; }
+        public AuditoriaEstadualJson? Auditoria { get; init; }
     }
 }

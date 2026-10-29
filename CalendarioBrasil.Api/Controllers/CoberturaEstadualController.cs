@@ -1,4 +1,5 @@
-﻿using CalendarioBrasil.Application.DTOs;
+﻿using CalendarioBrasil.Application.Constants;
+using CalendarioBrasil.Application.DTOs;
 using CalendarioBrasil.Application.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -21,7 +22,7 @@ namespace CalendarioBrasil.Api.Controllers
         [HttpGet]
         [ProducesResponseType(typeof(CoberturaEstadualDto), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ValidationProblemDetails), StatusCodes.Status400BadRequest)]
-        public ActionResult<CoberturaEstadualDto> Obter([FromQuery, Required, RegularExpression("^[a-zA-Z]{2}$")] string? uf)
+        public ActionResult<CoberturaEstadualDto> Obter([FromQuery, Required, RegularExpression("^[a-zA-Z]{2}$")] string? uf, [FromQuery, Range(LimitesConsultaCalendario.AnoMinimo, LimitesConsultaCalendario.AnoMaximo)] int? ano = null)
         {
             if (!_service.SuportaUf(uf))
             {
@@ -29,7 +30,7 @@ namespace CalendarioBrasil.Api.Controllers
                 return ValidationProblem(ModelState);
             }
 
-            return Ok(_service.ObterPorUf(uf!));
+            return Ok(_service.ObterPorUf(uf!, ano));
         }
     }
 }

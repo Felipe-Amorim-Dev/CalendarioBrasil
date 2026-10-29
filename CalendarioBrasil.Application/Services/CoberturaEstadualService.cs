@@ -21,13 +21,13 @@ namespace CalendarioBrasil.Application.Services
             return !string.IsNullOrWhiteSpace(uf) && _gerador.ObterUfsDisponiveis().Contains(uf.Trim(), StringComparer.OrdinalIgnoreCase);
         }
 
-        public CoberturaEstadualDto ObterPorUf(string uf)
+        public CoberturaEstadualDto ObterPorUf(string uf, int? ano = null)
         {
             ArgumentException.ThrowIfNullOrWhiteSpace(uf);
 
-            var diagnostico = _gerador.ObterDiagnostico(uf);
+            var diagnostico = _gerador.ObterDiagnostico(uf, ano);
 
-            return new CoberturaEstadualDto(diagnostico.Uf, diagnostico.RegrasCadastradas, diagnostico.Situacao, diagnostico.Homologado, diagnostico.RegrasComVigenciaNaoConfirmada, diagnostico.Limitacoes);
+            return new CoberturaEstadualDto(diagnostico.Uf, diagnostico.RegrasCadastradas, diagnostico.Situacao, diagnostico.Homologado, diagnostico.RegrasComVigenciaNaoConfirmada, diagnostico.Limitacoes, diagnostico.AnoConsultado, diagnostico.AnoInicialValidado, diagnostico.AnoFinalValidado, diagnostico.DataRevisao, diagnostico.Responsavel, diagnostico.FontesPorCodigo);
         }
     }
 }

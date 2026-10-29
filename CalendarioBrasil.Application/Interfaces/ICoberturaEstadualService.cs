@@ -8,6 +8,6 @@ namespace CalendarioBrasil.Application.Interfaces
     public interface ICoberturaEstadualService
     {
         bool SuportaUf(string? uf);
-        CoberturaEstadualDto ObterPorUf(string uf);
+        CoberturaEstadualDto ObterPorUf(string uf, int? ano = null);
     }
 }

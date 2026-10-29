@@ -66,5 +66,33 @@ namespace CalendarioBrasil.Tests.Infrastructure
         {
             Assert.Throws<ArgumentException>(() => _gerador.ObterDiagnostico("XX"));
         }
+
+        [Theory]
+        [InlineData("RJ")]
+        [InlineData("SP")]
+        [InlineData("TO")]
+        [InlineData("GO")]
+        public void ObterDiagnostico_QuandoAno2027_NaoDeveHomologarCatalogosPendentes(string uf)
+        {
+            var diagnostico = _gerador.ObterDiagnostico(uf, 2027);
+
+            Assert.Equal(2027, diagnostico.AnoConsultado);
+            Assert.False(diagnostico.Homologado);
+        }
+
+        [Fact]
+        public void ObterDiagnostico_QuandoAnoInvalido_DeveLancarExcecao()
+        {
+            Assert.Throws<ArgumentOutOfRangeException>(() => _gerador.ObterDiagnostico("RJ", 2101));
+        }
+
+        [Fact]
+        public void ObterDiagnostico_QuandoAnoNaoInformado_DeveManterCompatibilidade()
+        {
+            var diagnostico = _gerador.ObterDiagnostico("RJ");
+
+            Assert.Null(diagnostico.AnoConsultado);
+            Assert.False(diagnostico.Homologado);
+        }
     }
 }
