@@ -4,6 +4,7 @@ using CalendarioBrasil.Application.Services;
 using CalendarioBrasil.Domain.Interfaces;
 using CalendarioBrasil.Domain.Services;
 using CalendarioBrasil.Infrastructure.Calendarios;
+using CalendarioBrasil.Infrastructure.Catalogos;
 using Microsoft.AspNetCore.RateLimiting;
 using System.Threading.RateLimiting;
 
@@ -15,6 +16,10 @@ builder.Services.AddProblemDetails();
 builder.Services.AddSingleton<GeradorFeriadosNacionaisFixos>();
 builder.Services.AddSingleton<CalculadoraDatasMoveis>();
 builder.Services.AddSingleton<IGeradorFeriadosEstaduais, GeradorFeriadosEstaduaisRj>();
+
+builder.Services.AddSingleton<CalculadoraDatasRecorrentes>();
+builder.Services.AddSingleton<ICatalogoEventosComplementares, CatalogoEventosComplementares>();
+builder.Services.AddScoped<IEventosService, EventosService>();
 
 builder.Services.AddScoped<IFeriadosNacionaisFixosService, FeriadosNacionaisFixosService>();
 builder.Services.AddScoped<ICalendarioService, CalendarioService>();
