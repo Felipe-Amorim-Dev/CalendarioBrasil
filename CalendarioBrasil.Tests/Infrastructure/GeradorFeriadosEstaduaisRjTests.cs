@@ -98,5 +98,18 @@ namespace CalendarioBrasil.Tests.Infrastructure
         {
             Assert.Throws<ArgumentNullException>(() => _gerador.Gerar(null!));
         }
+
+        [Theory]
+        [InlineData(2025, 2)]
+        [InlineData(2026, 3)]
+        [InlineData(2027, 3)]
+        [InlineData(2028, 3)]
+        public void Gerar_AposRefatoracao_DevePreservarQuantidadeDeFeriados(int ano, int quantidadeEsperada)
+        {
+            var feriados = _gerador.Gerar(new AnoCalendario(ano));
+
+            Assert.Equal(quantidadeEsperada, feriados.Count);
+            Assert.All(feriados, feriado => Assert.Equal("RJ", feriado.Uf));
+        }
     }
 }
