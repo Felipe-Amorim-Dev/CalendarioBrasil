@@ -27,3 +27,6 @@ publish/
 
 # Logs
 *.log
+
+# Arquivos gerados pelo exportador
+/dist/
