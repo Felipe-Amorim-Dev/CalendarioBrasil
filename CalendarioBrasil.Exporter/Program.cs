@@ -13,45 +13,98 @@ namespace CalendarioBrasil.Exporter
     {
         private static async Task<int> Main(string[] args)
         {
-            if (args.Length != 6 || !string.Equals(args[0], "--ano", StringComparison.OrdinalIgnoreCase) || !string.Equals(args[2], "--uf", StringComparison.OrdinalIgnoreCase) || !string.Equals(args[4], "--saida", StringComparison.OrdinalIgnoreCase) || !int.TryParse(args[1], NumberStyles.None, CultureInfo.InvariantCulture, out int ano))
-            {
-                Console.Error.WriteLine("Uso: --ano 2027 --uf RJ --saida dist");
-                return 2;
-            }
-
             try
             {
+                var parametros = LerParametros(args);
+
+                bool individual = parametros.Count == 3 && parametros.ContainsKey("--ano") && parametros.ContainsKey("--uf") && parametros.ContainsKey("--saida");
+                bool lote = parametros.Count == 4 && parametros.ContainsKey("--ano-inicial") && parametros.ContainsKey("--ano-final") && parametros.ContainsKey("--ufs") && parametros.ContainsKey("--saida");
+
+                if (!individual && !lote)
+                {
+                    throw new ArgumentException("Informe os argumentos de uma exportação individual ou em lote.");
+                }
+
                 var calculadoraMoveis = new CalculadoraDatasMoveis();
-                var calculadoraRecorrentes = new CalculadoraDatasRecorrentes();
+                IGeradorFeriadosEstaduais[] geradores = [new GeradorFeriadosEstaduaisRj(calculadoraMoveis)];
+                ICatalogoEventosComplementares catalogo = new CatalogoEventosComplementares(calculadoraMoveis, new CalculadoraDatasRecorrentes());
 
-                IGeradorFeriadosEstaduais[] geradoresEstaduais = [new GeradorFeriadosEstaduaisRj(calculadoraMoveis)];
-                ICatalogoEventosComplementares catalogo = new CatalogoEventosComplementares(calculadoraMoveis, calculadoraRecorrentes);
-
-                IEventosService eventosService = new EventosService(new GeradorFeriadosNacionaisFixos(), geradoresEstaduais, catalogo);
+                IEventosService eventosService = new EventosService(new GeradorFeriadosNacionaisFixos(), geradores, catalogo);
                 var exportador = new ExportadorCalendarioJson(eventosService);
 
-                var arquivo = await exportador.ExportarAsync(ano, args[3], args[5]);
+                if (individual)
+                {
+                    int ano = ObterAno(parametros, "--ano");
+                    var arquivo = await exportador.ExportarAsync(ano, parametros["--uf"], parametros["--saida"]);
 
-                Console.WriteLine($"Arquivo gerado: {arquivo}");
-                Console.WriteLine("Atenção: o calendário possui cobertura legal parcial.");
+                    Console.WriteLine($"Arquivo gerado: {arquivo}");
+                }
+                else
+                {
+                    int anoInicial = ObterAno(parametros, "--ano-inicial");
+                    int anoFinal = ObterAno(parametros, "--ano-final");
+                    IEnumerable<string> ufs = string.Equals(parametros["--ufs"], "todas", StringComparison.OrdinalIgnoreCase) ? eventosService.ObterUfsSuportadas() : parametros["--ufs"].Split(',', StringSplitOptions.TrimEntries);
+
+                    var exportadorLote = new ExportadorLoteJson(eventosService, exportador);
+                    var manifesto = await exportadorLote.ExportarAsync(anoInicial, anoFinal, ufs, parametros["--saida"]);
+
+                    Console.WriteLine($"Calendários gerados: {manifesto.Calendarios.Count}");
+                    Console.WriteLine($"Manifesto: {Path.Combine(Path.GetFullPath(parametros["--saida"]), "manifest.json")}");
+                }
+
+                Console.WriteLine("Atenção: os dados ainda possuem cobertura legal parcial.");
 
                 return 0;
             }
             catch (ArgumentException ex)
             {
                 Console.Error.WriteLine($"Parâmetros inválidos: {ex.Message}");
+                Console.Error.WriteLine("Individual: --ano 2027 --uf RJ --saida dist");
+                Console.Error.WriteLine("Lote: --ano-inicial 2027 --ano-final 2030 --ufs todas --saida dist");
                 return 2;
             }
             catch (IOException ex)
             {
-                Console.Error.WriteLine($"Erro ao gravar o arquivo: {ex.Message}");
+                Console.Error.WriteLine($"Erro de gravação: {ex.Message}");
                 return 1;
             }
             catch (UnauthorizedAccessException ex)
             {
-                Console.Error.WriteLine($"Acesso ao diretório negado: {ex.Message}");
+                Console.Error.WriteLine($"Acesso negado: {ex.Message}");
                 return 1;
             }
+        }
+
+        private static Dictionary<string, string> LerParametros(string[] args)
+        {
+            string[] permitidos = ["--ano", "--uf", "--ano-inicial", "--ano-final", "--ufs", "--saida"];
+
+            if (args.Length == 0 || args.Length % 2 != 0)
+            {
+                throw new ArgumentException("Os argumentos devem ser informados em pares de nome e valor.");
+            }
+
+            var parametros = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+
+            for (int i = 0; i < args.Length; i += 2)
+            {
+                if (!permitidos.Contains(args[i], StringComparer.OrdinalIgnoreCase) || string.IsNullOrWhiteSpace(args[i + 1]) || !parametros.TryAdd(args[i], args[i + 1]))
+                {
+                    throw new ArgumentException($"Argumento inválido ou duplicado: {args[i]}");
+                }
+            }
+
+            return parametros;
+        }
+
+        private static int ObterAno(IReadOnlyDictionary<string, string> parametros, string chave)
+        {
+            if (!int.TryParse(parametros[chave], NumberStyles.None, CultureInfo.InvariantCulture, out int ano))
+            {
+                throw new ArgumentException($"O argumento {chave} deve conter um ano numérico válido.");
+            }
+
+            return ano;
         }
     }
 }

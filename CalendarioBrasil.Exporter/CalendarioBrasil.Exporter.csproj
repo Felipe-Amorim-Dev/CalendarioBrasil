@@ -11,4 +11,9 @@
 		<ProjectReference Include="..\CalendarioBrasil.Domain\CalendarioBrasil.Domain.csproj" />
 		<ProjectReference Include="..\CalendarioBrasil.Infrastructure\CalendarioBrasil.Infrastructure.csproj" />
 	</ItemGroup>
+	<ItemGroup>
+		<EmbeddedResource Include="Site\index.html" LogicalName="CalendarioBrasil.Exporter.Site.index.html" />
+		<EmbeddedResource Include="Site\app.js" LogicalName="CalendarioBrasil.Exporter.Site.app.js" />
+		<EmbeddedResource Include="Site\_headers" LogicalName="CalendarioBrasil.Exporter.Site._headers" />
+	</ItemGroup>
 </Project>
