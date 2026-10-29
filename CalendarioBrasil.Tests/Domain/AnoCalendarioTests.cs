@@ -8,7 +8,7 @@ namespace CalendarioBrasil.Tests.Domain
     public sealed class AnoCalendarioTests
     {
         [Theory]
-        [InlineData(1900)]
+        [InlineData(2024)]
         [InlineData(2027)]
         [InlineData(2100)]
         public void Construtor_QuandoAnoValido_DeveCriarInstancia(int ano)
@@ -19,7 +19,8 @@ namespace CalendarioBrasil.Tests.Domain
         }
 
         [Theory]
-        [InlineData(1899)]
+        [InlineData(1900)]
+        [InlineData(2023)]
         [InlineData(2101)]
         public void Construtor_QuandoAnoInvalido_DeveLancarExcecao(int ano)
         {
