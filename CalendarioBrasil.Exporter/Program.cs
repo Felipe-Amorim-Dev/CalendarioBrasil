@@ -26,10 +26,9 @@ namespace CalendarioBrasil.Exporter
                 }
 
                 var calculadoraMoveis = new CalculadoraDatasMoveis();
-                IGeradorFeriadosEstaduais[] geradores = [new GeradorFeriadosEstaduaisRj(calculadoraMoveis)];
+                IGeradorFeriadosEstaduais geradorEstadual = new GeradorFeriadosEstaduais(calculadoraMoveis);
                 ICatalogoEventosComplementares catalogo = new CatalogoEventosComplementares(calculadoraMoveis, new CalculadoraDatasRecorrentes());
-
-                IEventosService eventosService = new EventosService(new GeradorFeriadosNacionaisFixos(), geradores, catalogo);
+                IEventosService eventosService = new EventosService(new GeradorFeriadosNacionaisFixos(), geradorEstadual, catalogo);
                 var exportador = new ExportadorCalendarioJson(eventosService);
 
                 if (individual)

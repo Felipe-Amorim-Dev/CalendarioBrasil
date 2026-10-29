@@ -15,9 +15,9 @@ namespace CalendarioBrasil.Tests.Exporter
         private static ExportadorLoteJson CriarExportador()
         {
             var calculadora = new CalculadoraDatasMoveis();
-            IGeradorFeriadosEstaduais[] geradores = [new GeradorFeriadosEstaduaisRj(calculadora)];
+            var geradorEstadual = new GeradorFeriadosEstaduais(calculadora);
             var catalogo = new CatalogoEventosComplementares(calculadora, new CalculadoraDatasRecorrentes());
-            IEventosService service = new EventosService(new GeradorFeriadosNacionaisFixos(), geradores, catalogo);
+            IEventosService service = new EventosService(new GeradorFeriadosNacionaisFixos(), geradorEstadual, catalogo);
 
             return new ExportadorLoteJson(service, new ExportadorCalendarioJson(service));
         }
@@ -94,7 +94,7 @@ namespace CalendarioBrasil.Tests.Exporter
         [Fact]
         public async Task ExportarAsync_QuandoUfNaoSuportada_DeveLancarExcecao()
         {
-            await Assert.ThrowsAsync<ArgumentException>(() => CriarExportador().ExportarAsync(2027, 2028, ["RJ", "SP"], "dist"));
+            await Assert.ThrowsAsync<ArgumentException>(() => CriarExportador().ExportarAsync(2027, 2028, ["RJ", "MG"], "dist"));
         }
 
         [Fact]

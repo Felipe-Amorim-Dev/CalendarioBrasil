@@ -16,10 +16,10 @@ namespace CalendarioBrasil.Tests.Application
         private static EventosService CriarService()
         {
             var calculadoraMoveis = new CalculadoraDatasMoveis();
-            var geradores = new IGeradorFeriadosEstaduais[] { new GeradorFeriadosEstaduaisRj(calculadoraMoveis) };
+            var geradorEstadual = new GeradorFeriadosEstaduais(calculadoraMoveis);
             var catalogo = new CatalogoEventosComplementares(calculadoraMoveis, new CalculadoraDatasRecorrentes());
 
-            return new EventosService(new GeradorFeriadosNacionaisFixos(), geradores, catalogo);
+            return new EventosService(new GeradorFeriadosNacionaisFixos(), geradorEstadual, catalogo);
         }
 
         [Fact]

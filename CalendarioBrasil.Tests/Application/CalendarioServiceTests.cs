@@ -10,7 +10,7 @@ namespace CalendarioBrasil.Tests.Application
 {
     public sealed class CalendarioServiceTests
     {
-        private readonly CalendarioService _service = new(new GeradorFeriadosNacionaisFixos(), new IGeradorFeriadosEstaduais[] { new GeradorFeriadosEstaduaisRj(new CalculadoraDatasMoveis()) });
+        private readonly CalendarioService _service = new(new GeradorFeriadosNacionaisFixos(), new GeradorFeriadosEstaduais(new CalculadoraDatasMoveis()));
 
         [Fact]
         public void ObterPorAnoEUf_QuandoAno2027ERj_DeveRetornarDozeFeriados()

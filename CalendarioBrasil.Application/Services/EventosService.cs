@@ -5,35 +5,30 @@ using CalendarioBrasil.Domain.Enums;
 using CalendarioBrasil.Domain.Interfaces;
 using CalendarioBrasil.Domain.Services;
 using CalendarioBrasil.Domain.ValueObjects;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace CalendarioBrasil.Application.Services
 {
     public sealed class EventosService : IEventosService
     {
         private readonly GeradorFeriadosNacionaisFixos _geradorNacional;
+        private readonly IGeradorFeriadosEstaduais _geradorEstadual;
         private readonly ICatalogoEventosComplementares _catalogoComplementar;
-        private readonly IReadOnlyDictionary<string, IGeradorFeriadosEstaduais> _geradoresEstaduais;
 
-        public EventosService(GeradorFeriadosNacionaisFixos geradorNacional, IEnumerable<IGeradorFeriadosEstaduais> geradoresEstaduais, ICatalogoEventosComplementares catalogoComplementar)
+        public EventosService(GeradorFeriadosNacionaisFixos geradorNacional, IGeradorFeriadosEstaduais geradorEstadual, ICatalogoEventosComplementares catalogoComplementar)
         {
             _geradorNacional = geradorNacional ?? throw new ArgumentNullException(nameof(geradorNacional));
+            _geradorEstadual = geradorEstadual ?? throw new ArgumentNullException(nameof(geradorEstadual));
             _catalogoComplementar = catalogoComplementar ?? throw new ArgumentNullException(nameof(catalogoComplementar));
-            ArgumentNullException.ThrowIfNull(geradoresEstaduais);
-
-            _geradoresEstaduais = geradoresEstaduais.ToDictionary(gerador => gerador.Uf, StringComparer.OrdinalIgnoreCase);
         }
 
         public bool SuportaUf(string? uf)
         {
-            return !string.IsNullOrWhiteSpace(uf) && _geradoresEstaduais.ContainsKey(uf.Trim());
+            return !string.IsNullOrWhiteSpace(uf) && _geradorEstadual.ObterUfsDisponiveis().Contains(uf.Trim(), StringComparer.OrdinalIgnoreCase);
         }
 
         public IReadOnlyList<string> ObterUfsSuportadas()
         {
-            return _geradoresEstaduais.Keys.OrderBy(uf => uf).ToArray();
+            return _geradorEstadual.ObterUfsDisponiveis();
         }
 
         public CalendarioEventosDto ObterPorAnoEUf(int ano, string uf, bool incluirPontosFacultativosFederais = false)
@@ -43,13 +38,17 @@ namespace CalendarioBrasil.Application.Services
             var anoCalendario = new AnoCalendario(ano);
             var ufNormalizada = uf.Trim().ToUpperInvariant();
 
-            if (!_geradoresEstaduais.TryGetValue(ufNormalizada, out var geradorEstadual))
+            if (!SuportaUf(ufNormalizada))
             {
                 throw new ArgumentException($"A UF {ufNormalizada} ainda não possui catálogo estadual disponível.", nameof(uf));
             }
 
-            var feriados = _geradorNacional.Gerar(anoCalendario).Concat(geradorEstadual.Gerar(anoCalendario)).Select(ConverterFeriado);
-            var complementares = _catalogoComplementar.Gerar(anoCalendario).Where(evento => incluirPontosFacultativosFederais || evento.Tipo != TipoEventoCalendario.PontoFacultativo || evento.Esfera != EsferaAplicacaoEvento.AdministracaoPublicaFederal);
+            var feriados = _geradorNacional.Gerar(anoCalendario)
+                .Concat(_geradorEstadual.Gerar(anoCalendario, ufNormalizada))
+                .Select(ConverterFeriado);
+
+            var complementares = _catalogoComplementar.Gerar(anoCalendario)
+                .Where(evento => incluirPontosFacultativosFederais || evento.Tipo != TipoEventoCalendario.PontoFacultativo || evento.Esfera != EsferaAplicacaoEvento.AdministracaoPublicaFederal);
 
             var eventos = feriados.Concat(complementares)
                 .DistinctBy(evento => (evento.Codigo, evento.Data, evento.Tipo, evento.Esfera, evento.Uf, evento.CodigoMunicipioIbge))
@@ -67,7 +66,7 @@ namespace CalendarioBrasil.Application.Services
 
             if (incluirPontosFacultativosFederais)
             {
-                limitacoes.Add("Pontos facultativos federais aplicam-se somente aos órgãos abrangidos pelas normas correspondentes.");
+                limitacoes.Add("Pontos facultativos federais aplicam-se somente aos órgãos abrangidos pelas respectivas normas.");
             }
 
             return new CalendarioEventosDto(anoCalendario.Valor, ufNormalizada, "Parcial", eventos.Length, eventos, limitacoes);

@@ -24,6 +24,11 @@ namespace CalendarioBrasil.Infrastructure.Calendarios.Regras
             ArgumentException.ThrowIfNullOrWhiteSpace(nome);
             ArgumentException.ThrowIfNullOrWhiteSpace(fundamentoLegal);
 
+            if (deslocamento < -365 || deslocamento > 365)
+            {
+                throw new ArgumentOutOfRangeException(nameof(deslocamento));
+            }
+
             ValidarVigencia(inicio, fim);
 
             return new RegraFeriadoEstadual(codigo, nome, null, null, deslocamento, inicio, fim, fundamentoLegal);
@@ -48,7 +53,7 @@ namespace CalendarioBrasil.Infrastructure.Calendarios.Regras
         {
             if (fim.HasValue && fim.Value < inicio)
             {
-                throw new ArgumentException("A data final de vigência não pode ser anterior à data inicial.");
+                throw new ArgumentException("A vigência final não pode ser anterior à inicial.");
             }
         }
     }

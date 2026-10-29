@@ -15,15 +15,15 @@ builder.Services.AddProblemDetails();
 
 builder.Services.AddSingleton<GeradorFeriadosNacionaisFixos>();
 builder.Services.AddSingleton<CalculadoraDatasMoveis>();
-builder.Services.AddSingleton<IGeradorFeriadosEstaduais, GeradorFeriadosEstaduaisRj>();
-
 builder.Services.AddSingleton<CalculadoraDatasRecorrentes>();
+
+builder.Services.AddSingleton<IGeradorFeriadosEstaduais, GeradorFeriadosEstaduais>();
 builder.Services.AddSingleton<ICatalogoEventosComplementares, CatalogoEventosComplementares>();
-builder.Services.AddScoped<IEventosService, EventosService>();
 
 builder.Services.AddScoped<IFeriadosNacionaisFixosService, FeriadosNacionaisFixosService>();
 builder.Services.AddScoped<ICalendarioService, CalendarioService>();
 builder.Services.AddScoped<IDatasMoveisService, DatasMoveisService>();
+builder.Services.AddScoped<IEventosService, EventosService>();
 
 builder.Services.AddRateLimiter(options =>
 {

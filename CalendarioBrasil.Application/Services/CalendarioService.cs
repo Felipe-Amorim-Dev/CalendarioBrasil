@@ -3,33 +3,28 @@ using CalendarioBrasil.Application.Interfaces;
 using CalendarioBrasil.Domain.Interfaces;
 using CalendarioBrasil.Domain.Services;
 using CalendarioBrasil.Domain.ValueObjects;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace CalendarioBrasil.Application.Services
 {
     public sealed class CalendarioService : ICalendarioService
     {
         private readonly GeradorFeriadosNacionaisFixos _geradorNacional;
-        private readonly IReadOnlyDictionary<string, IGeradorFeriadosEstaduais> _geradoresEstaduais;
+        private readonly IGeradorFeriadosEstaduais _geradorEstadual;
 
-        public CalendarioService(GeradorFeriadosNacionaisFixos geradorNacional, IEnumerable<IGeradorFeriadosEstaduais> geradoresEstaduais)
+        public CalendarioService(GeradorFeriadosNacionaisFixos geradorNacional, IGeradorFeriadosEstaduais geradorEstadual)
         {
             _geradorNacional = geradorNacional ?? throw new ArgumentNullException(nameof(geradorNacional));
-            ArgumentNullException.ThrowIfNull(geradoresEstaduais);
-
-            _geradoresEstaduais = geradoresEstaduais.ToDictionary(gerador => gerador.Uf, StringComparer.OrdinalIgnoreCase);
+            _geradorEstadual = geradorEstadual ?? throw new ArgumentNullException(nameof(geradorEstadual));
         }
 
         public bool SuportaUf(string? uf)
         {
-            return !string.IsNullOrWhiteSpace(uf) && _geradoresEstaduais.ContainsKey(uf.Trim());
+            return !string.IsNullOrWhiteSpace(uf) && _geradorEstadual.ObterUfsDisponiveis().Contains(uf.Trim(), StringComparer.OrdinalIgnoreCase);
         }
 
         public IReadOnlyList<string> ObterUfsSuportadas()
         {
-            return _geradoresEstaduais.Keys.OrderBy(uf => uf).ToArray();
+            return _geradorEstadual.ObterUfsDisponiveis();
         }
 
         public CalendarioFeriadosDto ObterPorAnoEUf(int ano, string uf)
@@ -39,13 +34,13 @@ namespace CalendarioBrasil.Application.Services
             var anoCalendario = new AnoCalendario(ano);
             var ufNormalizada = uf.Trim().ToUpperInvariant();
 
-            if (!_geradoresEstaduais.TryGetValue(ufNormalizada, out var geradorEstadual))
+            if (!SuportaUf(ufNormalizada))
             {
-                throw new ArgumentException($"A UF {ufNormalizada} ainda não possui um catálogo estadual disponível.", nameof(uf));
+                throw new ArgumentException($"A UF {ufNormalizada} ainda não possui catálogo estadual disponível.", nameof(uf));
             }
 
             var feriados = _geradorNacional.Gerar(anoCalendario)
-                .Concat(geradorEstadual.Gerar(anoCalendario))
+                .Concat(_geradorEstadual.Gerar(anoCalendario, ufNormalizada))
                 .DistinctBy(feriado => (feriado.Codigo, feriado.Data, feriado.Abrangencia, feriado.Uf))
                 .OrderBy(feriado => feriado.Data)
                 .ThenBy(feriado => feriado.Codigo)
@@ -55,7 +50,7 @@ namespace CalendarioBrasil.Application.Services
             string[] limitacoes =
             [
                 "O calendário inclui feriados nacionais fixos e os eventos estaduais cadastrados para a UF.",
-                "Ainda não inclui todos os feriados móveis, municipais ou demais eventos que possam ser aplicáveis."
+                "A cobertura legal ainda é parcial e não inclui todos os feriados municipais e eventos aplicáveis."
             ];
 
             return new CalendarioFeriadosDto(anoCalendario.Valor, ufNormalizada, "Parcial", feriados.Length, feriados, limitacoes);

@@ -1,13 +1,17 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<TargetFramework>net10.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+	</PropertyGroup>
 
-  <PropertyGroup>
-    <TargetFramework>net10.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-  </PropertyGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\CalendarioBrasil.Domain\CalendarioBrasil.Domain.csproj" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\CalendarioBrasil.Domain\CalendarioBrasil.Domain.csproj" />
-  </ItemGroup>
-
+	<ItemGroup>
+		<EmbeddedResource Include="Catalogos\Estaduais\*.json">
+			<LogicalName>CalendarioBrasil.Infrastructure.Catalogos.Estaduais.%(Filename)%(Extension)</LogicalName>
+		</EmbeddedResource>
+	</ItemGroup>
 </Project>

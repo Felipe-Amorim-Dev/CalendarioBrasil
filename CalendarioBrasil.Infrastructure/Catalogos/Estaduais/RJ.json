@@ -1,0 +1,33 @@
+{
+  "uf": "RJ",
+  "feriados": [
+    {
+      "codigo": "RJ_CARNAVAL",
+      "nome": "Terça-feira de Carnaval",
+      "tipoRegra": "RelativaPascoa",
+      "deslocamentoPascoa": -47,
+      "vigenciaInicio": "2008-05-15",
+      "vigenciaFim": null,
+      "fundamentoLegal": "Lei Estadual nº 5.243/2008"
+    },
+    {
+      "codigo": "RJ_SAO_JORGE",
+      "nome": "Dia de São Jorge",
+      "tipoRegra": "DataFixa",
+      "mes": 4,
+      "dia": 23,
+      "vigenciaInicio": "2008-03-06",
+      "vigenciaFim": null,
+      "fundamentoLegal": "Lei Estadual nº 5.198/2008"
+    },
+    {
+      "codigo": "RJ_CORPUS_CHRISTI",
+      "nome": "Corpus Christi",
+      "tipoRegra": "RelativaPascoa",
+      "deslocamentoPascoa": 60,
+      "vigenciaInicio": "2025-10-23",
+      "vigenciaFim": null,
+      "fundamentoLegal": "Lei Estadual nº 11.002/2025"
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "uf": "SP",
+  "feriados": [
+    {
+      "codigo": "SP_REVOLUCAO_CONSTITUCIONALISTA",
+      "nome": "Revolução Constitucionalista de 1932",
+      "tipoRegra": "DataFixa",
+      "mes": 7,
+      "dia": 9,
+      "vigenciaInicio": "1997-03-06",
+      "vigenciaFim": null,
+      "fundamentoLegal": "Lei Estadual nº 9.497/1997"
+    }
+  ]
+}
