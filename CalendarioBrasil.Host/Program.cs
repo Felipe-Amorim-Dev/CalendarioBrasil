@@ -18,6 +18,7 @@ builder.Services.AddSingleton<IGeradorFeriadosEstaduais, GeradorFeriadosEstaduai
 
 builder.Services.AddScoped<IFeriadosNacionaisFixosService, FeriadosNacionaisFixosService>();
 builder.Services.AddScoped<ICalendarioService, CalendarioService>();
+builder.Services.AddScoped<IDatasMoveisService, DatasMoveisService>();
 
 builder.Services.AddRateLimiter(options =>
 {
