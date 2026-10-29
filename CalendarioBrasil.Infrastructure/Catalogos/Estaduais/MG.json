@@ -9,7 +9,17 @@
       "dia": 21,
       "vigenciaInicio": "2011-12-07",
       "vigenciaFim": null,
-      "fundamentoLegal": "Constituição do Estado de Minas Gerais, art. 256, inciso I (EC nº 89/2011)"
+      "fundamentoLegal": "Constituição de Minas Gerais, art. 256, I, com redação da EC nº 89/2011; 21/04 já é feriado nacional"
     }
-  ]
+  ],
+  "auditoria": {
+    "situacao": "EmRevisao",
+    "dataRevisao": null,
+    "responsavel": null,
+    "anoInicialValidado": null,
+    "anoFinalValidado": null,
+    "fontesPorCodigo": {
+      "MG_DATA_MAGNA": "https://www.almg.gov.br/legislacao-mineira/texto/EMC/89/2011/"
+    }
+  }
 }

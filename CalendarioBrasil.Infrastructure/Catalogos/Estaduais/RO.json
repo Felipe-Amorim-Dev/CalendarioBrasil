@@ -7,9 +7,19 @@
       "tipoRegra": "DataFixa",
       "mes": 1,
       "dia": 4,
-      "vigenciaInicio": "2026-01-01",
+      "vigenciaInicio": "2010-04-26",
       "vigenciaFim": null,
-      "fundamentoLegal": "Feriado estadual confirmado no calendário oficial de Rondônia de 2026; lei instituidora a confirmar"
+      "fundamentoLegal": "Lei Estadual nº 2.291/2010 (DOE 26/04/2010), que revogou Decreto-Lei nº 39/1982"
     }
-  ]
+  ],
+  "auditoria": {
+    "situacao": "EmRevisao",
+    "dataRevisao": null,
+    "responsavel": null,
+    "anoInicialValidado": null,
+    "anoFinalValidado": null,
+    "fontesPorCodigo": {
+      "RO_INSTALACAO_ESTADO": "https://sapl.al.ro.leg.br/norma/4958"
+    }
+  }
 }

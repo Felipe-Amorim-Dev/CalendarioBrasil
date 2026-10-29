@@ -7,9 +7,20 @@
       "tipoRegra": "DataFixa",
       "mes": 8,
       "dia": 15,
-      "vigenciaInicio": "2026-01-01",
+      "vigenciaInicio": null,
       "vigenciaFim": null,
-      "fundamentoLegal": "Calendário estadual publicado pela SEPLAD/PA em 2026; lei instituidora a confirmar"
+      "fundamentoLegal": "Lei Estadual nº 37/1947 e Lei Estadual nº 5.999/1996 (calendário oficial do Pará); data exata de início a conferir",
+      "inicioEvidencia": "2024-01-01"
     }
-  ]
+  ],
+  "auditoria": {
+    "situacao": "EmRevisao",
+    "dataRevisao": null,
+    "responsavel": null,
+    "anoInicialValidado": null,
+    "anoFinalValidado": null,
+    "fontesPorCodigo": {
+      "PA_ADESAO_INDEPENDENCIA": "https://www.seplad.pa.gov.br/2025/12/22/governo-do-para-divulga-datas-de-feriados-e-pontos-facultativos-para-2026/"
+    }
+  }
 }

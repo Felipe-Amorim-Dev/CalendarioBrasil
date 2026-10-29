@@ -11,5 +11,15 @@
       "vigenciaFim": null,
       "fundamentoLegal": "Lei Estadual nº 25/1977"
     }
-  ]
+  ],
+  "auditoria": {
+    "situacao": "EmRevisao",
+    "dataRevisao": null,
+    "responsavel": null,
+    "anoInicialValidado": null,
+    "anoFinalValidado": null,
+    "fontesPorCodigo": {
+      "AM_PROVINCIA": "https://legisla.imprensaoficial.am.gov.br/diario_am/12/1977/12/8777"
+    }
+  }
 }

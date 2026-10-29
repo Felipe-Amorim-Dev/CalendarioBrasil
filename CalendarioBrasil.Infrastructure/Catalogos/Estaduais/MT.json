@@ -1,4 +1,12 @@
 {
   "uf": "MT",
-  "feriados": []
+  "feriados": [],
+  "auditoria": {
+    "situacao": "Pendente",
+    "dataRevisao": null,
+    "responsavel": null,
+    "anoInicialValidado": null,
+    "anoFinalValidado": null,
+    "fontesPorCodigo": {}
+  }
 }

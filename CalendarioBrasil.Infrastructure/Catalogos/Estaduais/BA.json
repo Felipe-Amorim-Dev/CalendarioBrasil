@@ -7,9 +7,20 @@
       "tipoRegra": "DataFixa",
       "mes": 7,
       "dia": 2,
-      "vigenciaInicio": "1990-01-01",
+      "vigenciaInicio": null,
       "vigenciaFim": null,
-      "fundamentoLegal": "Constituição do Estado da Bahia, art. 6º, § 3º"
+      "fundamentoLegal": "Constituição do Estado da Bahia, art. 6º, § 3º; início legal histórico a confirmar",
+      "inicioEvidencia": "2024-01-01"
     }
-  ]
+  ],
+  "auditoria": {
+    "situacao": "EmRevisao",
+    "dataRevisao": null,
+    "responsavel": null,
+    "anoInicialValidado": null,
+    "anoFinalValidado": null,
+    "fontesPorCodigo": {
+      "BA_INDEPENDENCIA": "https://www.jaguarari.ba.gov.br/pagina/exibir/anexo/%20267"
+    }
+  }
 }

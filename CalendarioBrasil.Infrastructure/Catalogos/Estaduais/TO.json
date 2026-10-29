@@ -7,9 +7,9 @@
       "tipoRegra": "DataFixa",
       "mes": 8,
       "dia": 15,
-      "vigenciaInicio": "2026-01-01",
+      "vigenciaInicio": "2024-09-26",
       "vigenciaFim": null,
-      "fundamentoLegal": "Feriado estadual reconhecido no calendário oficial do SIRC/INSS de 2026; lei instituidora a confirmar"
+      "fundamentoLegal": "Lei Estadual nº 4.509/2024, art. 1º; DOE 26/09/2024"
     },
     {
       "codigo": "TO_NOSSA_SENHORA_NATIVIDADE",
@@ -17,9 +17,10 @@
       "tipoRegra": "DataFixa",
       "mes": 9,
       "dia": 8,
-      "vigenciaInicio": "2026-01-01",
+      "vigenciaInicio": null,
       "vigenciaFim": null,
-      "fundamentoLegal": "Feriado estadual reconhecido em calendário público do Tocantins; lei instituidora a confirmar"
+      "fundamentoLegal": "Lei Estadual nº 627/1993; DOE nº 298; publicação e vigência exata a verificar",
+      "inicioEvidencia": "2024-01-01"
     },
     {
       "codigo": "TO_CRIACAO_ESTADO",
@@ -27,9 +28,22 @@
       "tipoRegra": "DataFixa",
       "mes": 10,
       "dia": 5,
-      "vigenciaInicio": "2026-01-01",
+      "vigenciaInicio": null,
       "vigenciaFim": null,
-      "fundamentoLegal": "Data Magna estadual; calendário oficial de 2026 do SIRC/INSS; lei instituidora a confirmar"
+      "fundamentoLegal": "Lei Estadual nº 98/1989; DOE nº 23; publicação e vigência exata a verificar",
+      "inicioEvidencia": "2024-01-01"
     }
-  ]
+  ],
+  "auditoria": {
+    "situacao": "EmRevisao",
+    "dataRevisao": null,
+    "responsavel": null,
+    "anoInicialValidado": null,
+    "anoFinalValidado": null,
+    "fontesPorCodigo": {
+      "TO_SENHOR_BONFIM": "https://sapl.al.to.leg.br/norma/994",
+      "TO_NOSSA_SENHORA_NATIVIDADE": "https://al.to.leg.br/legislacaoEstadual?pagPaginaAtual=224",
+      "TO_CRIACAO_ESTADO": "https://al.to.leg.br/legislacaoEstadual?pagPaginaAtual=255"
+    }
+  }
 }

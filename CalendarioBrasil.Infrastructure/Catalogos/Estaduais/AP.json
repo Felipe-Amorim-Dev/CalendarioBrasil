@@ -17,7 +17,7 @@
       "tipoRegra": "DataFixa",
       "mes": 5,
       "dia": 15,
-      "vigenciaInicio": "2018-01-01",
+      "vigenciaInicio": "2017-07-11",
       "vigenciaFim": null,
       "fundamentoLegal": "Lei Estadual nº 2.213/2017"
     },
@@ -27,9 +27,22 @@
       "tipoRegra": "DataFixa",
       "mes": 9,
       "dia": 13,
-      "vigenciaInicio": "2026-01-01",
+      "vigenciaInicio": null,
       "vigenciaFim": null,
-      "fundamentoLegal": "Calendário do TRE-AP/SIRC de 2026; lei estadual instituidora a confirmar"
+      "fundamentoLegal": "Constituição do Amapá, art. 355 (feriado em todo o território); início histórico da vigência a apurar",
+      "inicioEvidencia": "2026-01-01"
     }
-  ]
+  ],
+  "auditoria": {
+    "situacao": "EmRevisao",
+    "dataRevisao": null,
+    "responsavel": null,
+    "anoInicialValidado": null,
+    "anoFinalValidado": null,
+    "fontesPorCodigo": {
+      "AP_SAO_JOSE": "https://fecomercio-ap.portaldocomercio.org.br/produtos-e-servios-fecomercio-ap/calendrio-de-feriados-anual-fecomercio-ap/",
+      "AP_CABRALZINHO": "https://www.al.ap.gov.br/ver_texto_lei.php?iddocumento=77794",
+      "AP_DATA_MAGNA": "https://portal.mpap.mp.br/images/infancia/CE_Amapa.pdf"
+    }
+  }
 }

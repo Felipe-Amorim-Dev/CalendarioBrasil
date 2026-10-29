@@ -7,16 +7,16 @@
       "tipoRegra": "DataFixa",
       "mes": 4,
       "dia": 21,
-      "vigenciaInicio": "1989-12-27",
+      "vigenciaInicio": "1989-12-28",
       "vigenciaFim": null,
-      "fundamentoLegal": "Lei Distrital nº 72/1989, art. 1º"
+      "fundamentoLegal": "Lei Distrital nº 72/1989, art. 1º, I; a data também é feriado nacional (Tiradentes)"
     },
     {
       "codigo": "DF_CORPUS_CHRISTI",
       "nome": "Corpus Christi",
       "tipoRegra": "RelativaPascoa",
       "deslocamentoPascoa": 60,
-      "vigenciaInicio": "1989-12-27",
+      "vigenciaInicio": "1989-12-28",
       "vigenciaFim": null,
       "fundamentoLegal": "Lei Distrital nº 72/1989, art. 1º, parágrafo único"
     },
@@ -30,5 +30,17 @@
       "vigenciaFim": null,
       "fundamentoLegal": "Lei Distrital nº 963/1995"
     }
-  ]
+  ],
+  "auditoria": {
+    "situacao": "EmRevisao",
+    "dataRevisao": null,
+    "responsavel": null,
+    "anoInicialValidado": null,
+    "anoFinalValidado": null,
+    "fontesPorCodigo": {
+      "DF_ANIVERSARIO_BRASILIA": "https://www.sinj.df.gov.br/sinj/Norma/18459/18658_1865_textointegral.html",
+      "DF_CORPUS_CHRISTI": "https://www.sinj.df.gov.br/sinj/Norma/18459/18658_1865_textointegral.html",
+      "DF_DIA_EVANGELICO": "https://www.sinj.df.gov.br/sinj/Norma/48922/Lei_963_1995.html"
+    }
+  }
 }

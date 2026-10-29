@@ -7,9 +7,19 @@
       "tipoRegra": "DataFixa",
       "mes": 10,
       "dia": 3,
-      "vigenciaInicio": "2026-01-01",
+      "vigenciaInicio": "2006-12-07",
       "vigenciaFim": null,
-      "fundamentoLegal": "Data estadual reconhecida no calendário oficial de 2026; lei instituidora a confirmar"
+      "fundamentoLegal": "Lei Estadual nº 8.913/2006; DOE 07/12/2006"
     }
-  ]
+  ],
+  "auditoria": {
+    "situacao": "EmRevisao",
+    "dataRevisao": null,
+    "responsavel": null,
+    "anoInicialValidado": null,
+    "anoFinalValidado": null,
+    "fontesPorCodigo": {
+      "RN_MARTIRES": "https://leisestaduais.com.br/rn/lei-ordinaria-n-8913-2006-rio-grande-do-norte-declara-feriado-estadual-o-dia-03-de-outubro-dia-estadual-a-memoria-dos-protomartires-de-uruacu-e-cunhau"
+    }
+  }
 }

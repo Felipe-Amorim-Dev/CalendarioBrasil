@@ -7,9 +7,19 @@
       "tipoRegra": "DataFixa",
       "mes": 7,
       "dia": 28,
-      "vigenciaInicio": "2026-01-01",
+      "vigenciaInicio": "2016-10-21",
       "vigenciaFim": null,
-      "fundamentoLegal": "Data Magna estadual; calendário oficial 2026 (lei instituidora a confirmar)"
+      "fundamentoLegal": "Lei Estadual nº 2.457/1964, com redação da Lei nº 10.520/2016 (DOE 21/10/2016); marco conservador da redação atual"
     }
-  ]
+  ],
+  "auditoria": {
+    "situacao": "EmRevisao",
+    "dataRevisao": null,
+    "responsavel": null,
+    "anoInicialValidado": null,
+    "anoFinalValidado": null,
+    "fontesPorCodigo": {
+      "MA_ADESAO_INDEPENDENCIA": "https://www.legisweb.com.br/legislacao/?id=330224"
+    }
+  }
 }

@@ -9,7 +9,17 @@
       "dia": 6,
       "vigenciaInicio": "2017-06-09",
       "vigenciaFim": null,
-      "fundamentoLegal": "Lei Estadual nº 16.059/2017"
+      "fundamentoLegal": "Lei Estadual nº 16.059/2017, art. 1º (DOE 09/06/2017)"
     }
-  ]
+  ],
+  "auditoria": {
+    "situacao": "EmRevisao",
+    "dataRevisao": null,
+    "responsavel": null,
+    "anoInicialValidado": null,
+    "anoFinalValidado": null,
+    "fontesPorCodigo": {
+      "PE_DATA_MAGNA": "https://www.alepe.pe.gov.br/Flip/pubs/diario-oficial-2017-06-09/flip.pdf"
+    }
+  }
 }

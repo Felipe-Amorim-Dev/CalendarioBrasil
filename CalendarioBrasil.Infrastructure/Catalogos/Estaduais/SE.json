@@ -7,9 +7,20 @@
       "tipoRegra": "DataFixa",
       "mes": 7,
       "dia": 8,
-      "vigenciaInicio": "2026-01-01",
+      "vigenciaInicio": null,
       "vigenciaFim": null,
-      "fundamentoLegal": "Decreto Estadual nº 1.333/2025 (calendário 2026); lei instituidora a confirmar"
+      "fundamentoLegal": "Decreto Estadual nº 1.333/2025 confirma o feriado de 8 de julho em 2026; norma instituidora a confirmar",
+      "inicioEvidencia": "2024-01-01"
     }
-  ]
+  ],
+  "auditoria": {
+    "situacao": "EmRevisao",
+    "dataRevisao": null,
+    "responsavel": null,
+    "anoInicialValidado": null,
+    "anoFinalValidado": null,
+    "fontesPorCodigo": {
+      "SE_INDEPENDENCIA": "https://sergipe.se.gov.br/index.php/vge/noticia/feriados_2026"
+    }
+  }
 }

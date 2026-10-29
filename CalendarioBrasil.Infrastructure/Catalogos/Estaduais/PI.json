@@ -7,9 +7,20 @@
       "tipoRegra": "DataFixa",
       "mes": 10,
       "dia": 19,
-      "vigenciaInicio": "1937-08-30",
+      "vigenciaInicio": null,
       "vigenciaFim": null,
-      "fundamentoLegal": "Lei Estadual nº 176/1937"
+      "fundamentoLegal": "Lei Estadual nº 176/1937; revisão do texto e início histórico pendentes",
+      "inicioEvidencia": "2024-01-01"
     }
-  ]
+  ],
+  "auditoria": {
+    "situacao": "EmRevisao",
+    "dataRevisao": null,
+    "responsavel": null,
+    "anoInicialValidado": null,
+    "anoFinalValidado": null,
+    "fontesPorCodigo": {
+      "PI_DIA_PIAUI": "https://www.tre-pi.jus.br/legislacao/portarias-normativas-tre-pi/portarias-2024/portaria-presidencia-tre-pi-no-552-2024"
+    }
+  }
 }

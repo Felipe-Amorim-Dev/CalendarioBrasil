@@ -7,9 +7,9 @@
       "tipoRegra": "DataFixa",
       "mes": 6,
       "dia": 24,
-      "vigenciaInicio": "1993-07-07",
+      "vigenciaInicio": "1993-07-08",
       "vigenciaFim": null,
-      "fundamentoLegal": "Lei Estadual nº 5.553/1993"
+      "fundamentoLegal": "Lei Estadual nº 5.508/1993 (citações legislativas divergentes sobre a numeração exigem revisão)"
     },
     {
       "codigo": "AL_SAO_PEDRO",
@@ -17,7 +17,7 @@
       "tipoRegra": "DataFixa",
       "mes": 6,
       "dia": 29,
-      "vigenciaInicio": "1993-07-07",
+      "vigenciaInicio": "1993-07-08",
       "vigenciaFim": null,
       "fundamentoLegal": "Lei Estadual nº 5.509/1993"
     },
@@ -27,9 +27,9 @@
       "tipoRegra": "DataFixa",
       "mes": 9,
       "dia": 16,
-      "vigenciaInicio": "1992-01-01",
+      "vigenciaInicio": "2024-08-28",
       "vigenciaFim": null,
-      "fundamentoLegal": "Lei Estadual nº 5.247/1991 (conferir redação vigente)"
+      "fundamentoLegal": "Lei Estadual nº 9.358/2024 (DOE de 28/08/2024)"
     },
     {
       "codigo": "AL_DIA_EVANGELICO",
@@ -37,9 +37,23 @@
       "tipoRegra": "DataFixa",
       "mes": 11,
       "dia": 30,
-      "vigenciaInicio": "2014-01-01",
+      "vigenciaInicio": null,
       "vigenciaFim": null,
-      "fundamentoLegal": "Lei Estadual nº 7.530/2013 (conferir redação vigente)"
+      "fundamentoLegal": "Lei Estadual nº 7.530/2013 (art. 2º vetado); Decreto nº 106.093/2025 classifica 30/11/2026 como feriado estadual; alcance geral a confirmar",
+      "inicioEvidencia": "2026-01-01"
     }
-  ]
+  ],
+  "auditoria": {
+    "situacao": "EmRevisao",
+    "dataRevisao": null,
+    "responsavel": null,
+    "anoInicialValidado": null,
+    "anoFinalValidado": null,
+    "fontesPorCodigo": {
+      "AL_SAO_JOAO": "https://www.legisweb.com.br/legislacao/?id=116684",
+      "AL_SAO_PEDRO": "https://sapl.al.al.leg.br/media/sapl/public/normajuridica/1993/3364/lei_5.509_de_07.07.1993.pdf",
+      "AL_EMANCIPACAO": "https://sapl.al.al.leg.br/norma/3117",
+      "AL_DIA_EVANGELICO": "https://sapl.al.al.leg.br/norma/561"
+    }
+  }
 }

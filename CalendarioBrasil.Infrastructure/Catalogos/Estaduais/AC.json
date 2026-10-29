@@ -9,7 +9,7 @@
       "dia": 20,
       "vigenciaInicio": "2016-06-28",
       "vigenciaFim": null,
-      "fundamentoLegal": "Lei Estadual nº 3.137/2016 (com possibilidade de transferência anual)"
+      "fundamentoLegal": "Lei Estadual nº 3.137/2016; transferência conforme Lei nº 2.126/2009, alterada pela Lei nº 2.247/2009"
     },
     {
       "codigo": "AC_DIA_EVANGELICO",
@@ -19,7 +19,7 @@
       "dia": 23,
       "vigenciaInicio": "2004-01-30",
       "vigenciaFim": null,
-      "fundamentoLegal": "Lei Estadual nº 1.538/2004 (verificar transferências anuais)"
+      "fundamentoLegal": "Lei Estadual nº 1.538/2004; transferência conforme Lei nº 2.126/2009, alterada pela Lei nº 2.247/2009"
     },
     {
       "codigo": "AC_DIA_MULHER",
@@ -27,9 +27,9 @@
       "tipoRegra": "DataFixa",
       "mes": 3,
       "dia": 8,
-      "vigenciaInicio": "2002-01-01",
+      "vigenciaInicio": "2001-09-17",
       "vigenciaFim": null,
-      "fundamentoLegal": "Lei Estadual nº 1.411/2001"
+      "fundamentoLegal": "Lei Estadual nº 1.411/2001; transferência conforme Lei nº 2.126/2009, alterada pela Lei nº 2.247/2009"
     },
     {
       "codigo": "AC_ANIVERSARIO_ESTADO",
@@ -49,7 +49,7 @@
       "dia": 5,
       "vigenciaInicio": "1969-01-01",
       "vigenciaFim": null,
-      "fundamentoLegal": "Lei Estadual nº 243/1968"
+      "fundamentoLegal": "Lei Estadual nº 243/1968; transferência conforme Lei nº 2.126/2009, alterada pela Lei nº 2.247/2009"
     },
     {
       "codigo": "AC_TRATADO_PETROPOLIS",
@@ -59,7 +59,22 @@
       "dia": 17,
       "vigenciaInicio": "1966-01-01",
       "vigenciaFim": null,
-      "fundamentoLegal": "Lei Estadual nº 57/1965"
+      "fundamentoLegal": "Lei Estadual nº 57/1965; transferência conforme Lei nº 2.126/2009, alterada pela Lei nº 2.247/2009"
     }
-  ]
+  ],
+  "auditoria": {
+    "situacao": "EmRevisao",
+    "dataRevisao": null,
+    "responsavel": null,
+    "anoInicialValidado": null,
+    "anoFinalValidado": null,
+    "fontesPorCodigo": {
+      "AC_DIA_CATOLICO": "https://legis.ac.gov.br/detalhar/2249",
+      "AC_DIA_EVANGELICO": "https://legis.ac.gov.br/detalhar/1087",
+      "AC_DIA_MULHER": "https://www.legis.ac.gov.br/detalhar/1828",
+      "AC_ANIVERSARIO_ESTADO": "https://legis.ac.gov.br/detalhar/6624-1",
+      "AC_DIA_AMAZONIA": "https://legis.ac.gov.br/detalhar/6624-1",
+      "AC_TRATADO_PETROPOLIS": "https://legis.ac.gov.br/detalhar/6624-1"
+    }
+  }
 }

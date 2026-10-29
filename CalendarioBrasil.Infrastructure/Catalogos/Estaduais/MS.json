@@ -11,5 +11,15 @@
       "vigenciaFim": null,
       "fundamentoLegal": "Lei Estadual nº 10/1979"
     }
-  ]
+  ],
+  "auditoria": {
+    "situacao": "EmRevisao",
+    "dataRevisao": null,
+    "responsavel": null,
+    "anoInicialValidado": null,
+    "anoFinalValidado": null,
+    "fontesPorCodigo": {
+      "MS_CRIACAO_ESTADO": "https://aacpdappls.net.ms.gov.br/appls/legislacao/secoge/govato.nsf/1b758e65922af3e904256b220050342a/a489a293563f506304256e450002e9f8"
+    }
+  }
 }

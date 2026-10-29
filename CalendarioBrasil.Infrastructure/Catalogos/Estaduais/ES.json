@@ -6,9 +6,20 @@
       "nome": "Nossa Senhora da Penha",
       "tipoRegra": "RelativaPascoa",
       "deslocamentoPascoa": 8,
-      "vigenciaInicio": "2026-01-01",
+      "vigenciaInicio": null,
       "vigenciaFim": null,
-      "fundamentoLegal": "Feriado estadual reconhecido no Decreto Estadual nº 124-S/2026; lei instituidora a confirmar"
+      "fundamentoLegal": "Lei Estadual nº 11.010/2019, art. 1º, parágrafo único; segunda-feira 8 dias após a Páscoa; publicação a confirmar",
+      "inicioEvidencia": "2024-01-01"
     }
-  ]
+  ],
+  "auditoria": {
+    "situacao": "EmRevisao",
+    "dataRevisao": null,
+    "responsavel": null,
+    "anoInicialValidado": null,
+    "anoFinalValidado": null,
+    "fontesPorCodigo": {
+      "ES_NOSSA_SENHORA_PENHA": "https://legislacao.serra.es.gov.br/Arquivo/Documents/legislacao/html/D19082025.html"
+    }
+  }
 }

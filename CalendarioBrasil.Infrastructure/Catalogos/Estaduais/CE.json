@@ -7,9 +7,19 @@
       "tipoRegra": "DataFixa",
       "mes": 3,
       "dia": 25,
-      "vigenciaInicio": "2013-01-01",
+      "vigenciaInicio": "2011-12-06",
       "vigenciaFim": null,
-      "fundamentoLegal": "Constituição Estadual do Ceará, art. 18, parágrafo único (EC nº 73/2012)"
+      "fundamentoLegal": "Constituição do Ceará, art. 18, parágrafo único (Emenda Constitucional nº 73/2011, DOE 06/12/2011)"
     }
-  ]
+  ],
+  "auditoria": {
+    "situacao": "EmRevisao",
+    "dataRevisao": null,
+    "responsavel": null,
+    "anoInicialValidado": null,
+    "anoFinalValidado": null,
+    "fontesPorCodigo": {
+      "CE_DATA_MAGNA": "https://www2.al.ce.gov.br/legislativo/legislacao5/const_e/ec73.htm"
+    }
+  }
 }

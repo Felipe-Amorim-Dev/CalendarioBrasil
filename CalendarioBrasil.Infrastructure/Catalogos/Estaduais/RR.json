@@ -7,9 +7,20 @@
       "tipoRegra": "DataFixa",
       "mes": 10,
       "dia": 5,
-      "vigenciaInicio": "1992-01-01",
+      "vigenciaInicio": null,
       "vigenciaFim": null,
-      "fundamentoLegal": "Constituição do Estado de Roraima, art. 9º"
+      "fundamentoLegal": "Constituição do Estado de Roraima, art. 9º; vigência histórica a confirmar",
+      "inicioEvidencia": "2024-01-01"
     }
-  ]
+  ],
+  "auditoria": {
+    "situacao": "EmRevisao",
+    "dataRevisao": null,
+    "responsavel": null,
+    "anoInicialValidado": null,
+    "anoFinalValidado": null,
+    "fontesPorCodigo": {
+      "RR_DATA_MAGNA": "https://www.sirc.gov.br/feriados-e-indisponibilidades-sirc/"
+    }
+  }
 }

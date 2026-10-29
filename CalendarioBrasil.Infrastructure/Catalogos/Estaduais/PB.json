@@ -7,9 +7,19 @@
       "tipoRegra": "DataFixa",
       "mes": 8,
       "dia": 5,
-      "vigenciaInicio": "2015-12-16",
+      "vigenciaInicio": "2015-12-17",
       "vigenciaFim": null,
-      "fundamentoLegal": "Lei Estadual nº 10.601/2015"
+      "fundamentoLegal": "Lei Estadual nº 10.601/2015 (DOE 17/12/2015); revogou art. 2º da Lei nº 3.489/1967"
     }
-  ]
+  ],
+  "auditoria": {
+    "situacao": "EmRevisao",
+    "dataRevisao": null,
+    "responsavel": null,
+    "anoInicialValidado": null,
+    "anoFinalValidado": null,
+    "fontesPorCodigo": {
+      "PB_FUNDACAO_PARAIBA": "https://www.legisweb.com.br/legislacao/?id=313833"
+    }
+  }
 }
