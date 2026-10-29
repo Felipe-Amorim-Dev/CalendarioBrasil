@@ -19,6 +19,7 @@ builder.Services.AddSingleton<CalculadoraDatasRecorrentes>();
 
 builder.Services.AddSingleton<IGeradorFeriadosEstaduais, GeradorFeriadosEstaduais>();
 builder.Services.AddSingleton<ICatalogoEventosComplementares, CatalogoEventosComplementares>();
+builder.Services.AddScoped<ICoberturaEstadualService, CoberturaEstadualService>();
 
 builder.Services.AddScoped<IFeriadosNacionaisFixosService, FeriadosNacionaisFixosService>();
 builder.Services.AddScoped<ICalendarioService, CalendarioService>();

@@ -12,8 +12,9 @@ namespace CalendarioBrasil.Infrastructure.Calendarios.Models
         public int? Mes { get; init; }
         public int? Dia { get; init; }
         public int? DeslocamentoPascoa { get; init; }
-        public required DateOnly VigenciaInicio { get; init; }
+        public DateOnly? VigenciaInicio { get; init; }
         public DateOnly? VigenciaFim { get; init; }
+        public DateOnly? InicioEvidencia { get; init; }
         public required string FundamentoLegal { get; init; }
     }
 }

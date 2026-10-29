@@ -71,6 +71,41 @@ namespace CalendarioBrasil.Infrastructure.Calendarios
             return feriados.OrderBy(feriado => feriado.Data).ThenBy(feriado => feriado.Codigo).ToArray();
         }
 
+        public DiagnosticoCatalogoEstadual ObterDiagnostico(string uf)
+        {
+            ArgumentException.ThrowIfNullOrWhiteSpace(uf);
+
+            var ufNormalizada = uf.Trim().ToUpperInvariant();
+
+            if (!_catalogos.TryGetValue(ufNormalizada, out var regras))
+            {
+                throw new ArgumentException($"A UF {ufNormalizada} não possui catálogo disponível.", nameof(uf));
+            }
+
+            var vigenciasPendentes = regras.Where(regra => !regra.VigenciaInicio.HasValue).Select(regra => regra.Codigo).OrderBy(codigo => codigo, StringComparer.Ordinal).ToArray();
+
+            var limitacoes = new List<string>
+            {
+                "A revisão jurídica do catálogo estadual ainda não foi concluída.",
+                "A disponibilidade técnica do catálogo não garante que todos os feriados estaduais tenham sido cadastrados.",
+                "O calendário não contempla feriados municipais."
+            };
+
+            if (regras.Count == 0)
+            {
+                limitacoes.Add("Não existem regras estaduais cadastradas. Isso não comprova a inexistência de feriados.");
+            }
+
+            if (vigenciasPendentes.Length > 0)
+            {
+                limitacoes.Add("Existem regras com vigência legal não confirmada; suas datas futuras são projeções.");
+            }
+
+            var situacao = regras.Count == 0 ? "SemRegrasCadastradas" : "PendenteRevisao";
+
+            return new DiagnosticoCatalogoEstadual(ufNormalizada, regras.Count, situacao, false, vigenciasPendentes, limitacoes);
+        }
+
         private static IReadOnlyDictionary<string, IReadOnlyList<RegraFeriadoEstadual>> CarregarCatalogos()
         {
             var assembly = typeof(GeradorFeriadosEstaduais).Assembly;
@@ -120,13 +155,13 @@ namespace CalendarioBrasil.Infrastructure.Calendarios
                     RegraFeriadoEstadual regra = item.TipoRegra switch
                     {
                         "DataFixa" when item.Mes.HasValue && item.Dia.HasValue && !item.DeslocamentoPascoa.HasValue =>
-                            RegraFeriadoEstadual.Fixa(item.Codigo, item.Nome, item.Mes.Value, item.Dia.Value, item.VigenciaInicio, item.FundamentoLegal, item.VigenciaFim),
+                            RegraFeriadoEstadual.Fixa(item.Codigo, item.Nome, item.Mes.Value, item.Dia.Value, item.VigenciaInicio, item.FundamentoLegal, item.VigenciaFim, item.InicioEvidencia),
 
                         "RelativaPascoa" when item.DeslocamentoPascoa.HasValue && !item.Mes.HasValue && !item.Dia.HasValue =>
-                            RegraFeriadoEstadual.RelativaPascoa(item.Codigo, item.Nome, item.DeslocamentoPascoa.Value, item.VigenciaInicio, item.FundamentoLegal, item.VigenciaFim),
+                            RegraFeriadoEstadual.RelativaPascoa(item.Codigo, item.Nome, item.DeslocamentoPascoa.Value, item.VigenciaInicio, item.FundamentoLegal, item.VigenciaFim, item.InicioEvidencia),
 
                         "DataFixaTransferidaDomingo" when item.Mes.HasValue && item.Dia.HasValue && !item.DeslocamentoPascoa.HasValue =>
-                            RegraFeriadoEstadual.FixaTransferidaDomingo(item.Codigo, item.Nome, item.Mes.Value, item.Dia.Value, item.VigenciaInicio, item.FundamentoLegal, item.VigenciaFim),
+                            RegraFeriadoEstadual.FixaTransferidaDomingo(item.Codigo, item.Nome, item.Mes.Value, item.Dia.Value, item.VigenciaInicio, item.FundamentoLegal, item.VigenciaFim, item.InicioEvidencia),
 
                         _ => throw new InvalidDataException($"Regra inválida no catálogo {recurso}: {item.Codigo}.")
                     };

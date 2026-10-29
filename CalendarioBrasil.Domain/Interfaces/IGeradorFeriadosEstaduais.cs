@@ -7,5 +7,6 @@ namespace CalendarioBrasil.Domain.Interfaces
     {
         IReadOnlyList<string> ObterUfsDisponiveis();
         IReadOnlyList<Feriado> Gerar(AnoCalendario ano, string uf);
+        DiagnosticoCatalogoEstadual ObterDiagnostico(string uf);
     }
 }
