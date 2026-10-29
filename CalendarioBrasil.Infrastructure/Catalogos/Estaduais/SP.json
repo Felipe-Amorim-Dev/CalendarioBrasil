@@ -11,5 +11,15 @@
       "vigenciaFim": null,
       "fundamentoLegal": "Lei Estadual nº 9.497/1997"
     }
-  ]
+  ],
+  "auditoria": {
+    "situacao": "EmRevisao",
+    "dataRevisao": null,
+    "responsavel": null,
+    "anoInicialValidado": null,
+    "anoFinalValidado": null,
+    "fontesPorCodigo": {
+      "SP_REVOLUCAO_CONSTITUCIONALISTA": "https://www.al.sp.gov.br/repositorio/legislacao/lei/1997/compilacao-lei-9497-05.03.1997.html"
+    }
+  }
 }

@@ -20,6 +20,26 @@ namespace CalendarioBrasil.Infrastructure.Calendarios.Validacoes
                 throw new InvalidDataException($"Situação de auditoria inválida para {uf}.");
             }
 
+            if (auditoria.FontesPorCodigo is null)
+            {
+                throw new InvalidDataException($"As fontes documentais do catálogo {uf} não podem ser nulas.");
+            }
+
+            var codigos = regras.Select(regra => regra.Codigo).ToHashSet(StringComparer.Ordinal);
+
+            foreach (var fonte in auditoria.FontesPorCodigo)
+            {
+                if (!codigos.Contains(fonte.Key))
+                {
+                    throw new InvalidDataException($"A fonte {fonte.Key} não corresponde a uma regra cadastrada em {uf}.");
+                }
+
+                if (string.IsNullOrWhiteSpace(fonte.Value) || !Uri.TryCreate(fonte.Value, UriKind.Absolute, out var uri) || uri.Scheme != Uri.UriSchemeHttps || !string.IsNullOrEmpty(uri.UserInfo))
+                {
+                    throw new InvalidDataException($"Endereço documental inválido para {fonte.Key}.");
+                }
+            }
+
             if (auditoria.Situacao != "Aprovada")
             {
                 return;
@@ -27,12 +47,12 @@ namespace CalendarioBrasil.Infrastructure.Calendarios.Validacoes
 
             if (regras.Count == 0)
             {
-                throw new InvalidDataException($"O catálogo {uf} não pode ser aprovado automaticamente sem regras. É necessária uma revisão específica.");
+                throw new InvalidDataException($"O catálogo {uf} não pode ser aprovado sem uma revisão específica de cobertura.");
             }
 
             if (!auditoria.DataRevisao.HasValue || string.IsNullOrWhiteSpace(auditoria.Responsavel))
             {
-                throw new InvalidDataException($"A auditoria aprovada de {uf} exige data de revisão e responsável.");
+                throw new InvalidDataException($"A auditoria aprovada de {uf} exige data e responsável.");
             }
 
             if (auditoria.DataRevisao.Value > DateOnly.FromDateTime(DateTime.UtcNow))
@@ -42,25 +62,17 @@ namespace CalendarioBrasil.Infrastructure.Calendarios.Validacoes
 
             if (!auditoria.AnoInicialValidado.HasValue || !auditoria.AnoFinalValidado.HasValue || auditoria.AnoInicialValidado.Value < 2024 || auditoria.AnoFinalValidado.Value > 2100 || auditoria.AnoInicialValidado.Value > auditoria.AnoFinalValidado.Value)
             {
-                throw new InvalidDataException($"A auditoria aprovada de {uf} exige um intervalo de anos válido.");
+                throw new InvalidDataException($"O período validado de {uf} é inválido.");
             }
 
             if (regras.Any(regra => !regra.VigenciaInicio.HasValue))
             {
-                throw new InvalidDataException($"O catálogo {uf} possui regras com vigência legal não confirmada.");
+                throw new InvalidDataException($"O catálogo {uf} possui vigências legais não confirmadas.");
             }
 
-            if (auditoria.FontesPorCodigo is null || auditoria.FontesPorCodigo.Count != regras.Count)
+            if (auditoria.FontesPorCodigo.Count != regras.Count)
             {
-                throw new InvalidDataException($"A auditoria de {uf} deve possuir uma fonte para cada regra cadastrada.");
-            }
-
-            foreach (var regra in regras)
-            {
-                if (!auditoria.FontesPorCodigo.TryGetValue(regra.Codigo, out var endereco) || !Uri.TryCreate(endereco, UriKind.Absolute, out var uri) || uri.Scheme != Uri.UriSchemeHttps || !string.IsNullOrEmpty(uri.UserInfo))
-                {
-                    throw new InvalidDataException($"Fonte documental inválida ou ausente para {regra.Codigo}.");
-                }
+                throw new InvalidDataException($"A auditoria de {uf} exige uma fonte para cada regra.");
             }
         }
     }

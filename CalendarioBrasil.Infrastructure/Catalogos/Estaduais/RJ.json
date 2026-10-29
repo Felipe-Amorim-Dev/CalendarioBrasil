@@ -29,5 +29,17 @@
       "vigenciaFim": null,
       "fundamentoLegal": "Lei Estadual nº 11.002/2025"
     }
-  ]
+  ],
+  "auditoria": {
+    "situacao": "EmRevisao",
+    "dataRevisao": null,
+    "responsavel": null,
+    "anoInicialValidado": null,
+    "anoFinalValidado": null,
+    "fontesPorCodigo": {
+      "RJ_CARNAVAL": "https://alerjln1.alerj.rj.gov.br/contlei.nsf/351902c88b9f0cde03256bcf00607a5b/063f7c027766eab48325744a007a4ab0",
+      "RJ_SAO_JORGE": "https://alerjln1.alerj.rj.gov.br/scpro0711.nsf/3372bd49984790dd83257258006f0719/094e2cd7679638b2832572a7006ee116",
+      "RJ_CORPUS_CHRISTI": "https://www3.alerj.rj.gov.br/lotus_notes/default.asp?id=53&url=L2NvbnRsZWkubnNmL2M4YWEwOTAwMDI1ZmVlZjYwMzI1NjRlYzAwNjBkZmZmLzQ2ODM3ZTRkMjJiMDFmMzUwMzI1OGQyYzAwNDhhYmRhP09wZW5Eb2N1bWVudA%3D%3D"
+    }
+  }
 }

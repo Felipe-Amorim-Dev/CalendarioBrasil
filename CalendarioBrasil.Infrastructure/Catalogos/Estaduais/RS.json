@@ -9,7 +9,17 @@
       "dia": 20,
       "vigenciaInicio": "1995-10-13",
       "vigenciaFim": null,
-      "fundamentoLegal": "Constituição Estadual do RS, art. 6º, parágrafo único; Decreto Estadual nº 36.180/1995"
+      "fundamentoLegal": "Constituição Estadual, art. 6º, § 1º; Emenda Constitucional nº 11/1995; Decreto Estadual nº 36.180/1995"
     }
-  ]
+  ],
+  "auditoria": {
+    "situacao": "EmRevisao",
+    "dataRevisao": null,
+    "responsavel": null,
+    "anoInicialValidado": null,
+    "anoFinalValidado": null,
+    "fontesPorCodigo": {
+      "RS_REVOLUCAO_FARROUPILHA": "https://www.trf4.jus.br/trf4/controlador.php?acao=calendario_feriados_listar&selOrgao=2"
+    }
+  }
 }
