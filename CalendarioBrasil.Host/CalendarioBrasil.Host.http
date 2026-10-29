@@ -1,0 +1,6 @@
+@CalendarioBrasil.Host_HostAddress = http://localhost:5082
+
+GET {{CalendarioBrasil.Host_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

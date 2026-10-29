@@ -8,6 +8,9 @@
   <Folder Name="/Domain/">
     <Project Path="CalendarioBrasil.Domain/CalendarioBrasil.Domain.csproj" />
   </Folder>
+  <Folder Name="/Host/">
+    <Project Path="CalendarioBrasil.Host/CalendarioBrasil.Host.csproj" Id="da33648d-620a-491d-9ebf-dc4bd323e53b" />
+  </Folder>
   <Folder Name="/Infrastructure/">
     <Project Path="CalendarioBrasil.Infrastructure/CalendarioBrasil.Infrastructure.csproj" />
   </Folder>

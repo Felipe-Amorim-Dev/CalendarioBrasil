@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+	<PropertyGroup>
+		<TargetFramework>net10.0</TargetFramework>
+		<Nullable>enable</Nullable>
+		<ImplicitUsings>enable</ImplicitUsings>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\CalendarioBrasil.Api\CalendarioBrasil.Api.csproj" />
+		<ProjectReference Include="..\CalendarioBrasil.Application\CalendarioBrasil.Application.csproj" />
+		<ProjectReference Include="..\CalendarioBrasil.Infrastructure\CalendarioBrasil.Infrastructure.csproj" />
+		<ProjectReference Include="..\CalendarioBrasil.Domain\CalendarioBrasil.Domain.csproj" />
+	</ItemGroup>
+</Project>

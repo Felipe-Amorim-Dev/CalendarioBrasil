@@ -1,16 +1,23 @@
+using CalendarioBrasil.Api.Controllers;
 using CalendarioBrasil.Application.Interfaces;
 using CalendarioBrasil.Application.Services;
+using CalendarioBrasil.Domain.Interfaces;
 using CalendarioBrasil.Domain.Services;
+using CalendarioBrasil.Infrastructure.Calendarios;
 using Microsoft.AspNetCore.RateLimiting;
 using System.Threading.RateLimiting;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddControllers();
+builder.Services.AddControllers().AddApplicationPart(typeof(FeriadosController).Assembly);
 builder.Services.AddProblemDetails();
 
 builder.Services.AddSingleton<GeradorFeriadosNacionaisFixos>();
+builder.Services.AddSingleton<CalculadoraDatasMoveis>();
+builder.Services.AddSingleton<IGeradorFeriadosEstaduais, GeradorFeriadosEstaduaisRj>();
+
 builder.Services.AddScoped<IFeriadosNacionaisFixosService, FeriadosNacionaisFixosService>();
+builder.Services.AddScoped<ICalendarioService, CalendarioService>();
 
 builder.Services.AddRateLimiter(options =>
 {
