@@ -18,6 +18,7 @@
     <ProjectReference Include="..\CalendarioBrasil.Api\CalendarioBrasil.Api.csproj" />
     <ProjectReference Include="..\CalendarioBrasil.Application\CalendarioBrasil.Application.csproj" />
     <ProjectReference Include="..\CalendarioBrasil.Domain\CalendarioBrasil.Domain.csproj" />
+    <ProjectReference Include="..\CalendarioBrasil.Infrastructure\CalendarioBrasil.Infrastructure.csproj" />
   </ItemGroup>
 
   <ItemGroup>
