@@ -1,0 +1,65 @@
+{
+  "uf": "AC",
+  "feriados": [
+    {
+      "codigo": "AC_DIA_CATOLICO",
+      "nome": "Dia do Católico",
+      "tipoRegra": "DataFixa",
+      "mes": 1,
+      "dia": 20,
+      "vigenciaInicio": "2016-06-28",
+      "vigenciaFim": null,
+      "fundamentoLegal": "Lei Estadual nº 3.137/2016 (com possibilidade de transferência anual)"
+    },
+    {
+      "codigo": "AC_DIA_EVANGELICO",
+      "nome": "Dia do Evangélico",
+      "tipoRegra": "DataFixa",
+      "mes": 1,
+      "dia": 23,
+      "vigenciaInicio": "2004-01-30",
+      "vigenciaFim": null,
+      "fundamentoLegal": "Lei Estadual nº 1.538/2004 (verificar transferências anuais)"
+    },
+    {
+      "codigo": "AC_DIA_MULHER",
+      "nome": "Dia Internacional da Mulher",
+      "tipoRegra": "DataFixa",
+      "mes": 3,
+      "dia": 8,
+      "vigenciaInicio": "2002-01-01",
+      "vigenciaFim": null,
+      "fundamentoLegal": "Lei Estadual nº 1.411/2001"
+    },
+    {
+      "codigo": "AC_ANIVERSARIO_ESTADO",
+      "nome": "Aniversário do Estado do Acre",
+      "tipoRegra": "DataFixa",
+      "mes": 6,
+      "dia": 15,
+      "vigenciaInicio": "1965-01-01",
+      "vigenciaFim": null,
+      "fundamentoLegal": "Lei Estadual nº 14/1964"
+    },
+    {
+      "codigo": "AC_DIA_AMAZONIA",
+      "nome": "Dia da Amazônia",
+      "tipoRegra": "DataFixa",
+      "mes": 9,
+      "dia": 5,
+      "vigenciaInicio": "1969-01-01",
+      "vigenciaFim": null,
+      "fundamentoLegal": "Lei Estadual nº 243/1968"
+    },
+    {
+      "codigo": "AC_TRATADO_PETROPOLIS",
+      "nome": "Tratado de Petrópolis",
+      "tipoRegra": "DataFixa",
+      "mes": 11,
+      "dia": 17,
+      "vigenciaInicio": "1966-01-01",
+      "vigenciaFim": null,
+      "fundamentoLegal": "Lei Estadual nº 57/1965"
+    }
+  ]
+}

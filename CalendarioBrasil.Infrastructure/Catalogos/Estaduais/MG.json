@@ -1,0 +1,15 @@
+{
+  "uf": "MG",
+  "feriados": [
+    {
+      "codigo": "MG_DATA_MAGNA",
+      "nome": "Data Magna de Minas Gerais — Tiradentes (mesma data do feriado nacional)",
+      "tipoRegra": "DataFixa",
+      "mes": 4,
+      "dia": 21,
+      "vigenciaInicio": "2011-12-07",
+      "vigenciaFim": null,
+      "fundamentoLegal": "Constituição do Estado de Minas Gerais, art. 256, inciso I (EC nº 89/2011)"
+    }
+  ]
+}

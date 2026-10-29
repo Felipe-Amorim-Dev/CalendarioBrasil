@@ -1,0 +1,15 @@
+{
+  "uf": "MA",
+  "feriados": [
+    {
+      "codigo": "MA_ADESAO_INDEPENDENCIA",
+      "nome": "Adesão do Maranhão à Independência do Brasil",
+      "tipoRegra": "DataFixa",
+      "mes": 7,
+      "dia": 28,
+      "vigenciaInicio": "2026-01-01",
+      "vigenciaFim": null,
+      "fundamentoLegal": "Data Magna estadual; calendário oficial 2026 (lei instituidora a confirmar)"
+    }
+  ]
+}

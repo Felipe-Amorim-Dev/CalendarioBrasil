@@ -1,0 +1,15 @@
+{
+  "uf": "PE",
+  "feriados": [
+    {
+      "codigo": "PE_DATA_MAGNA",
+      "nome": "Data Magna de Pernambuco — Revolução Pernambucana de 1817",
+      "tipoRegra": "DataFixa",
+      "mes": 3,
+      "dia": 6,
+      "vigenciaInicio": "2017-06-09",
+      "vigenciaFim": null,
+      "fundamentoLegal": "Lei Estadual nº 16.059/2017"
+    }
+  ]
+}

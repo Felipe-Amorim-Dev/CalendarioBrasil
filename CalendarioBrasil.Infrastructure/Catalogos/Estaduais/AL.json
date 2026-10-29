@@ -1,0 +1,45 @@
+{
+  "uf": "AL",
+  "feriados": [
+    {
+      "codigo": "AL_SAO_JOAO",
+      "nome": "Dia de São João",
+      "tipoRegra": "DataFixa",
+      "mes": 6,
+      "dia": 24,
+      "vigenciaInicio": "1993-07-07",
+      "vigenciaFim": null,
+      "fundamentoLegal": "Lei Estadual nº 5.553/1993"
+    },
+    {
+      "codigo": "AL_SAO_PEDRO",
+      "nome": "Dia de São Pedro",
+      "tipoRegra": "DataFixa",
+      "mes": 6,
+      "dia": 29,
+      "vigenciaInicio": "1993-07-07",
+      "vigenciaFim": null,
+      "fundamentoLegal": "Lei Estadual nº 5.509/1993"
+    },
+    {
+      "codigo": "AL_EMANCIPACAO",
+      "nome": "Emancipação Política de Alagoas",
+      "tipoRegra": "DataFixa",
+      "mes": 9,
+      "dia": 16,
+      "vigenciaInicio": "1992-01-01",
+      "vigenciaFim": null,
+      "fundamentoLegal": "Lei Estadual nº 5.247/1991 (conferir redação vigente)"
+    },
+    {
+      "codigo": "AL_DIA_EVANGELICO",
+      "nome": "Dia Estadual do Evangélico",
+      "tipoRegra": "DataFixa",
+      "mes": 11,
+      "dia": 30,
+      "vigenciaInicio": "2014-01-01",
+      "vigenciaFim": null,
+      "fundamentoLegal": "Lei Estadual nº 7.530/2013 (conferir redação vigente)"
+    }
+  ]
+}

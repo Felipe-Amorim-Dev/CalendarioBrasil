@@ -10,11 +10,19 @@ namespace CalendarioBrasil.Tests.Infrastructure
         private readonly GeradorFeriadosEstaduais _gerador = new(new CalculadoraDatasMoveis());
 
         [Fact]
-        public void ObterUfsDisponiveis_DeveRetornarEstadosCadastrados()
+        public void ObterUfsDisponiveis_DeveRetornarVinteESeteUfs()
         {
             var ufs = _gerador.ObterUfsDisponiveis();
 
-            Assert.Equal(new[] { "RJ", "RS", "SP" }, ufs);
+            string[] esperadas =
+            [
+                "AC", "AL", "AM", "AP", "BA", "CE", "DF", "ES", "GO",
+                "MA", "MG", "MS", "MT", "PA", "PB", "PE", "PI", "PR",
+                "RJ", "RN", "RO", "RR", "RS", "SC", "SE", "SP", "TO"
+            ];
+
+            Assert.Equal(27, ufs.Count);
+            Assert.Equal(esperadas, ufs);
         }
 
         [Theory]
@@ -102,6 +110,38 @@ namespace CalendarioBrasil.Tests.Infrastructure
 
             Assert.Equal(feriados.Count, feriados.Select(feriado => feriado.Codigo).Distinct().Count());
             Assert.All(feriados, feriado => Assert.False(string.IsNullOrWhiteSpace(feriado.FundamentoLegal)));
+        }
+
+        [Theory]
+        [InlineData("GO")]
+        [InlineData("MT")]
+        [InlineData("PR")]
+        public void Gerar_QuandoCatalogoNaoPossuiRegras_DeveRetornarListaVazia(string uf)
+        {
+            var feriados = _gerador.Gerar(new AnoCalendario(2027), uf);
+
+            Assert.Empty(feriados);
+        }
+
+        [Theory]
+        [InlineData("AC")]
+        [InlineData("BA")]
+        [InlineData("DF")]
+        [InlineData("MG")]
+        [InlineData("SC")]
+        [InlineData("TO")]
+        public void Gerar_QuandoUfCadastrada_DeveRetornarRegistrosValidos(string uf)
+        {
+            var feriados = _gerador.Gerar(new AnoCalendario(2027), uf);
+
+            Assert.All(feriados, feriado =>
+            {
+                Assert.Equal(uf, feriado.Uf);
+                Assert.Equal(2027, feriado.Data.Year);
+                Assert.False(string.IsNullOrWhiteSpace(feriado.FundamentoLegal));
+            });
+
+            Assert.Equal(feriados.Count, feriados.Select(feriado => feriado.Codigo).Distinct().Count());
         }
     }
 }

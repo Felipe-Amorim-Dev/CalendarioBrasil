@@ -3,13 +3,13 @@
   "feriados": [
     {
       "codigo": "RS_REVOLUCAO_FARROUPILHA",
-      "nome": "Revolução Farroupilha - Data Magna do Estado",
+      "nome": "Revolução Farroupilha — Data Magna do Estado",
       "tipoRegra": "DataFixa",
       "mes": 9,
       "dia": 20,
       "vigenciaInicio": "1995-10-13",
       "vigenciaFim": null,
-      "fundamentoLegal": "Constituição Estadual do RS, art. 6º, com redação da Emenda Constitucional nº 11/1995; Decreto nº 36.180/1995"
+      "fundamentoLegal": "Constituição Estadual do RS, art. 6º, parágrafo único; Decreto Estadual nº 36.180/1995"
     }
   ]
 }

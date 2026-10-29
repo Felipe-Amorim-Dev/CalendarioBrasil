@@ -1,0 +1,15 @@
+{
+  "uf": "PA",
+  "feriados": [
+    {
+      "codigo": "PA_ADESAO_INDEPENDENCIA",
+      "nome": "Adesão do Grão-Pará à Independência do Brasil",
+      "tipoRegra": "DataFixa",
+      "mes": 8,
+      "dia": 15,
+      "vigenciaInicio": "2026-01-01",
+      "vigenciaFim": null,
+      "fundamentoLegal": "Calendário estadual publicado pela SEPLAD/PA em 2026; lei instituidora a confirmar"
+    }
+  ]
+}

@@ -1,0 +1,35 @@
+{
+  "uf": "TO",
+  "feriados": [
+    {
+      "codigo": "TO_SENHOR_BONFIM",
+      "nome": "Dia do Senhor do Bonfim",
+      "tipoRegra": "DataFixa",
+      "mes": 8,
+      "dia": 15,
+      "vigenciaInicio": "2026-01-01",
+      "vigenciaFim": null,
+      "fundamentoLegal": "Feriado estadual reconhecido no calendário oficial do SIRC/INSS de 2026; lei instituidora a confirmar"
+    },
+    {
+      "codigo": "TO_NOSSA_SENHORA_NATIVIDADE",
+      "nome": "Nossa Senhora da Natividade",
+      "tipoRegra": "DataFixa",
+      "mes": 9,
+      "dia": 8,
+      "vigenciaInicio": "2026-01-01",
+      "vigenciaFim": null,
+      "fundamentoLegal": "Feriado estadual reconhecido em calendário público do Tocantins; lei instituidora a confirmar"
+    },
+    {
+      "codigo": "TO_CRIACAO_ESTADO",
+      "nome": "Criação do Estado do Tocantins",
+      "tipoRegra": "DataFixa",
+      "mes": 10,
+      "dia": 5,
+      "vigenciaInicio": "2026-01-01",
+      "vigenciaFim": null,
+      "fundamentoLegal": "Data Magna estadual; calendário oficial de 2026 do SIRC/INSS; lei instituidora a confirmar"
+    }
+  ]
+}

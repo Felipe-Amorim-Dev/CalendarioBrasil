@@ -1,0 +1,15 @@
+{
+  "uf": "SE",
+  "feriados": [
+    {
+      "codigo": "SE_INDEPENDENCIA",
+      "nome": "Independência de Sergipe — Data Magna",
+      "tipoRegra": "DataFixa",
+      "mes": 7,
+      "dia": 8,
+      "vigenciaInicio": "2026-01-01",
+      "vigenciaFim": null,
+      "fundamentoLegal": "Decreto Estadual nº 1.333/2025 (calendário 2026); lei instituidora a confirmar"
+    }
+  ]
+}

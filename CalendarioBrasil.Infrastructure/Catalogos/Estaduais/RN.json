@@ -1,0 +1,15 @@
+{
+  "uf": "RN",
+  "feriados": [
+    {
+      "codigo": "RN_MARTIRES",
+      "nome": "Mártires de Cunhaú e Uruaçu",
+      "tipoRegra": "DataFixa",
+      "mes": 10,
+      "dia": 3,
+      "vigenciaInicio": "2026-01-01",
+      "vigenciaFim": null,
+      "fundamentoLegal": "Data estadual reconhecida no calendário oficial de 2026; lei instituidora a confirmar"
+    }
+  ]
+}

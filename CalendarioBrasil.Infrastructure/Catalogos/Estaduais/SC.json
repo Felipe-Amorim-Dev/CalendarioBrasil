@@ -1,0 +1,25 @@
+{
+  "uf": "SC",
+  "feriados": [
+    {
+      "codigo": "SC_DATA_MAGNA",
+      "nome": "Dia do Estado de Santa Catarina — Data Magna",
+      "tipoRegra": "DataFixaTransferidaDomingo",
+      "mes": 8,
+      "dia": 11,
+      "vigenciaInicio": "2023-01-01",
+      "vigenciaFim": null,
+      "fundamentoLegal": "Lei Estadual nº 18.531/2022, Anexo Único: domingo subsequente quando cair em dia útil"
+    },
+    {
+      "codigo": "SC_SANTA_CATARINA_ALEXANDRIA",
+      "nome": "Dia de Santa Catarina de Alexandria",
+      "tipoRegra": "DataFixaTransferidaDomingo",
+      "mes": 11,
+      "dia": 25,
+      "vigenciaInicio": "2023-01-01",
+      "vigenciaFim": null,
+      "fundamentoLegal": "Lei Estadual nº 18.531/2022, Anexo Único: domingo subsequente quando cair em dia útil"
+    }
+  ]
+}

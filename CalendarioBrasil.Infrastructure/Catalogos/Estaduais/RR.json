@@ -1,0 +1,15 @@
+{
+  "uf": "RR",
+  "feriados": [
+    {
+      "codigo": "RR_DATA_MAGNA",
+      "nome": "Criação do Estado de Roraima — Data Magna",
+      "tipoRegra": "DataFixa",
+      "mes": 10,
+      "dia": 5,
+      "vigenciaInicio": "1992-01-01",
+      "vigenciaFim": null,
+      "fundamentoLegal": "Constituição do Estado de Roraima, art. 9º"
+    }
+  ]
+}

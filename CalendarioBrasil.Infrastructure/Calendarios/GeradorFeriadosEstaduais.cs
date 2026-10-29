@@ -1,4 +1,4 @@
-﻿using System.Text.Json;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 using CalendarioBrasil.Domain.Entities;
 using CalendarioBrasil.Domain.Enums;
@@ -103,9 +103,9 @@ namespace CalendarioBrasil.Infrastructure.Calendarios
                     throw new InvalidDataException($"A UF do catálogo {recurso} não corresponde ao nome do arquivo.");
                 }
 
-                if (catalogo.Feriados is null || catalogo.Feriados.Count == 0)
+                if (catalogo.Feriados is null)
                 {
-                    throw new InvalidDataException($"O catálogo {recurso} não possui feriados cadastrados.");
+                    throw new InvalidDataException($"O catálogo {recurso} não possui lista de feriados válida.");
                 }
 
                 var regras = new List<RegraFeriadoEstadual>();
@@ -124,6 +124,9 @@ namespace CalendarioBrasil.Infrastructure.Calendarios
 
                         "RelativaPascoa" when item.DeslocamentoPascoa.HasValue && !item.Mes.HasValue && !item.Dia.HasValue =>
                             RegraFeriadoEstadual.RelativaPascoa(item.Codigo, item.Nome, item.DeslocamentoPascoa.Value, item.VigenciaInicio, item.FundamentoLegal, item.VigenciaFim),
+
+                        "DataFixaTransferidaDomingo" when item.Mes.HasValue && item.Dia.HasValue && !item.DeslocamentoPascoa.HasValue =>
+                            RegraFeriadoEstadual.FixaTransferidaDomingo(item.Codigo, item.Nome, item.Mes.Value, item.Dia.Value, item.VigenciaInicio, item.FundamentoLegal, item.VigenciaFim),
 
                         _ => throw new InvalidDataException($"Regra inválida no catálogo {recurso}: {item.Codigo}.")
                     };

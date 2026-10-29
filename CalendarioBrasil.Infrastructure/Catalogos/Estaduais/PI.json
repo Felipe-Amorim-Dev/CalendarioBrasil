@@ -1,0 +1,15 @@
+{
+  "uf": "PI",
+  "feriados": [
+    {
+      "codigo": "PI_DIA_PIAUI",
+      "nome": "Dia do Piauí",
+      "tipoRegra": "DataFixa",
+      "mes": 10,
+      "dia": 19,
+      "vigenciaInicio": "1937-08-30",
+      "vigenciaFim": null,
+      "fundamentoLegal": "Lei Estadual nº 176/1937"
+    }
+  ]
+}

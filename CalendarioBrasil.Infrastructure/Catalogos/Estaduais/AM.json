@@ -1,0 +1,15 @@
+{
+  "uf": "AM",
+  "feriados": [
+    {
+      "codigo": "AM_PROVINCIA",
+      "nome": "Elevação do Amazonas à categoria de Província",
+      "tipoRegra": "DataFixa",
+      "mes": 9,
+      "dia": 5,
+      "vigenciaInicio": "1977-12-21",
+      "vigenciaFim": null,
+      "fundamentoLegal": "Lei Estadual nº 25/1977"
+    }
+  ]
+}

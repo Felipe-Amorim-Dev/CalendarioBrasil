@@ -1,0 +1,15 @@
+{
+  "uf": "CE",
+  "feriados": [
+    {
+      "codigo": "CE_DATA_MAGNA",
+      "nome": "Data Magna do Ceará — Abolição da Escravidão",
+      "tipoRegra": "DataFixa",
+      "mes": 3,
+      "dia": 25,
+      "vigenciaInicio": "2013-01-01",
+      "vigenciaFim": null,
+      "fundamentoLegal": "Constituição Estadual do Ceará, art. 18, parágrafo único (EC nº 73/2012)"
+    }
+  ]
+}

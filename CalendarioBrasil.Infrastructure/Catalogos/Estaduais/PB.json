@@ -1,0 +1,15 @@
+{
+  "uf": "PB",
+  "feriados": [
+    {
+      "codigo": "PB_FUNDACAO_PARAIBA",
+      "nome": "Fundação da Paraíba — Data Magna",
+      "tipoRegra": "DataFixa",
+      "mes": 8,
+      "dia": 5,
+      "vigenciaInicio": "2015-12-16",
+      "vigenciaFim": null,
+      "fundamentoLegal": "Lei Estadual nº 10.601/2015"
+    }
+  ]
+}

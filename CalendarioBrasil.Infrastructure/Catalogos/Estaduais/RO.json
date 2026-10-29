@@ -1,0 +1,15 @@
+{
+  "uf": "RO",
+  "feriados": [
+    {
+      "codigo": "RO_INSTALACAO_ESTADO",
+      "nome": "Instalação do Estado de Rondônia",
+      "tipoRegra": "DataFixa",
+      "mes": 1,
+      "dia": 4,
+      "vigenciaInicio": "2026-01-01",
+      "vigenciaFim": null,
+      "fundamentoLegal": "Feriado estadual confirmado no calendário oficial de Rondônia de 2026; lei instituidora a confirmar"
+    }
+  ]
+}

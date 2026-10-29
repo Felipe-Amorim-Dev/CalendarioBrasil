@@ -1,0 +1,35 @@
+{
+  "uf": "AP",
+  "feriados": [
+    {
+      "codigo": "AP_SAO_JOSE",
+      "nome": "Dia de São José, padroeiro do Amapá",
+      "tipoRegra": "DataFixa",
+      "mes": 3,
+      "dia": 19,
+      "vigenciaInicio": "2003-01-01",
+      "vigenciaFim": null,
+      "fundamentoLegal": "Lei Estadual nº 667/2002"
+    },
+    {
+      "codigo": "AP_CABRALZINHO",
+      "nome": "Dia de Cabralzinho",
+      "tipoRegra": "DataFixa",
+      "mes": 5,
+      "dia": 15,
+      "vigenciaInicio": "2018-01-01",
+      "vigenciaFim": null,
+      "fundamentoLegal": "Lei Estadual nº 2.213/2017"
+    },
+    {
+      "codigo": "AP_DATA_MAGNA",
+      "nome": "Criação do Território Federal do Amapá",
+      "tipoRegra": "DataFixa",
+      "mes": 9,
+      "dia": 13,
+      "vigenciaInicio": "2026-01-01",
+      "vigenciaFim": null,
+      "fundamentoLegal": "Calendário do TRE-AP/SIRC de 2026; lei estadual instituidora a confirmar"
+    }
+  ]
+}

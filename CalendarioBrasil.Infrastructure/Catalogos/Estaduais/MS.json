@@ -1,0 +1,15 @@
+{
+  "uf": "MS",
+  "feriados": [
+    {
+      "codigo": "MS_CRIACAO_ESTADO",
+      "nome": "Criação do Estado de Mato Grosso do Sul",
+      "tipoRegra": "DataFixa",
+      "mes": 10,
+      "dia": 11,
+      "vigenciaInicio": "1979-10-29",
+      "vigenciaFim": null,
+      "fundamentoLegal": "Lei Estadual nº 10/1979"
+    }
+  ]
+}

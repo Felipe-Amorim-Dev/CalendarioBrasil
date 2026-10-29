@@ -1,0 +1,14 @@
+{
+  "uf": "ES",
+  "feriados": [
+    {
+      "codigo": "ES_NOSSA_SENHORA_PENHA",
+      "nome": "Nossa Senhora da Penha",
+      "tipoRegra": "RelativaPascoa",
+      "deslocamentoPascoa": 8,
+      "vigenciaInicio": "2026-01-01",
+      "vigenciaFim": null,
+      "fundamentoLegal": "Feriado estadual reconhecido no Decreto Estadual nº 124-S/2026; lei instituidora a confirmar"
+    }
+  ]
+}

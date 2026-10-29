@@ -1,0 +1,34 @@
+{
+  "uf": "DF",
+  "feriados": [
+    {
+      "codigo": "DF_ANIVERSARIO_BRASILIA",
+      "nome": "Aniversário de Brasília (mesma data de Tiradentes)",
+      "tipoRegra": "DataFixa",
+      "mes": 4,
+      "dia": 21,
+      "vigenciaInicio": "1989-12-27",
+      "vigenciaFim": null,
+      "fundamentoLegal": "Lei Distrital nº 72/1989, art. 1º"
+    },
+    {
+      "codigo": "DF_CORPUS_CHRISTI",
+      "nome": "Corpus Christi",
+      "tipoRegra": "RelativaPascoa",
+      "deslocamentoPascoa": 60,
+      "vigenciaInicio": "1989-12-27",
+      "vigenciaFim": null,
+      "fundamentoLegal": "Lei Distrital nº 72/1989, art. 1º, parágrafo único"
+    },
+    {
+      "codigo": "DF_DIA_EVANGELICO",
+      "nome": "Dia do Evangélico",
+      "tipoRegra": "DataFixa",
+      "mes": 11,
+      "dia": 30,
+      "vigenciaInicio": "1995-12-04",
+      "vigenciaFim": null,
+      "fundamentoLegal": "Lei Distrital nº 963/1995"
+    }
+  ]
+}
