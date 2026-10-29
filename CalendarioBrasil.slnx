@@ -1,0 +1,17 @@
+<Solution>
+  <Folder Name="/Api/">
+    <Project Path="CalendarioBrasil.Api/CalendarioBrasil.Api.csproj" />
+  </Folder>
+  <Folder Name="/Application/">
+    <Project Path="CalendarioBrasil.Application/CalendarioBrasil.Application.csproj" />
+  </Folder>
+  <Folder Name="/Domain/">
+    <Project Path="CalendarioBrasil.Domain/CalendarioBrasil.Domain.csproj" />
+  </Folder>
+  <Folder Name="/Infrastructure/">
+    <Project Path="CalendarioBrasil.Infrastructure/CalendarioBrasil.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/Tests/">
+    <Project Path="CalendarioBrasil.Tests/CalendarioBrasil.Tests.csproj" />
+  </Folder>
+</Solution>
