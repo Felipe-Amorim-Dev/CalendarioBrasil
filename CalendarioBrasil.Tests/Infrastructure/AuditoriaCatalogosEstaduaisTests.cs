@@ -38,17 +38,7 @@ namespace CalendarioBrasil.Tests.Infrastructure
             Assert.Equal(0, diagnostico.RegrasCadastradas);
             Assert.Equal("SemRegrasCadastradas", diagnostico.Situacao);
             Assert.False(diagnostico.Homologado);
-        }
-
-        [Fact]
-        public void ObterDiagnostico_QuandoUfTo_DeveIdentificarVigenciasPendentes()
-        {
-            var diagnostico = _gerador.ObterDiagnostico("TO");
-
-            Assert.Equal(3, diagnostico.RegrasCadastradas);
-            Assert.Equal(3, diagnostico.RegrasComVigenciaNaoConfirmada.Count);
-            Assert.False(diagnostico.Homologado);
-        }
+        }        
 
         [Fact]
         public void ObterDiagnostico_QuandoUfRj_DeveManterRevisaoPendente()

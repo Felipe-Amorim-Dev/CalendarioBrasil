@@ -1,4 +1,5 @@
-﻿using CalendarioBrasil.Application.DTOs;
+﻿using CalendarioBrasil.Application.Constants;
+using CalendarioBrasil.Application.DTOs;
 using CalendarioBrasil.Application.Interfaces;
 using CalendarioBrasil.Domain.ValueObjects;
 using System;
@@ -19,10 +20,14 @@ namespace CalendarioBrasil.Exporter.Services
 
         public Task<string> ExportarAsync(int ano, string uf, string diretorioSaida, CancellationToken cancellationToken = default)
         {
+            return ExportarAsync(ano, uf, diretorioSaida, "Geral", cancellationToken);
+        }
+
+        public Task<string> ExportarAsync(int ano, string uf, string diretorioSaida, string escopo, CancellationToken cancellationToken = default)
+        {
             ArgumentException.ThrowIfNullOrWhiteSpace(uf);
-
-            var calendario = _eventosService.ObterPorAnoEUf(ano, uf);
-
+            var escopoValidado = ConversorEscopoCalendario.Converter(escopo).ToString();
+            var calendario = _eventosService.ObterPorAnoEUf(ano, uf, escopo: escopoValidado);
             return ExportarAsync(calendario, diretorioSaida, cancellationToken);
         }
 
@@ -31,7 +36,6 @@ namespace CalendarioBrasil.Exporter.Services
             ArgumentNullException.ThrowIfNull(calendario);
             ArgumentException.ThrowIfNullOrWhiteSpace(diretorioSaida);
             ArgumentException.ThrowIfNullOrWhiteSpace(calendario.Uf);
-
             _ = new AnoCalendario(calendario.Ano);
 
             if (calendario.Uf.Length != 2 || calendario.Uf.Any(caractere => caractere < 'A' || caractere > 'Z') || !_eventosService.SuportaUf(calendario.Uf))
@@ -39,11 +43,10 @@ namespace CalendarioBrasil.Exporter.Services
                 throw new ArgumentException("A UF do calendário é inválida ou não suportada.", nameof(calendario));
             }
 
-            var diretorioAno = Path.Combine(Path.GetFullPath(diretorioSaida), calendario.Ano.ToString(System.Globalization.CultureInfo.InvariantCulture));
-            var arquivo = Path.Combine(diretorioAno, $"{calendario.Uf}.json");
-
+            var escopo = ConversorEscopoCalendario.Converter(calendario.Escopo).ToString();
+            var pasta = escopo == "Geral" ? Path.Combine(Path.GetFullPath(diretorioSaida), calendario.Ano.ToString(System.Globalization.CultureInfo.InvariantCulture)) : Path.Combine(Path.GetFullPath(diretorioSaida), "escopos", escopo, calendario.Ano.ToString(System.Globalization.CultureInfo.InvariantCulture));
+            var arquivo = Path.Combine(pasta, $"{calendario.Uf}.json");
             await GravadorJsonAtomico.GravarAsync(arquivo, calendario, cancellationToken);
-
             return arquivo;
         }
     }

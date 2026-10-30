@@ -21,12 +21,17 @@ async function carregarCalendarios() {
                 continue;
             }
 
+            const escopo = calendario.escopo || "Geral";
+            const caminho = calendario.arquivo;
+
+            if (!["Geral", "ExecutivoEstadual", "JudiciarioEstadual"].includes(escopo) || typeof caminho !== "string" || !/^(?:[0-9]{4}\/[A-Z]{2}\.json|escopos\/(?:ExecutivoEstadual|JudiciarioEstadual)\/[0-9]{4}\/[A-Z]{2}\.json)$/.test(caminho)) {
+                continue;
+            }
+
             const item = document.createElement("li");
             const link = document.createElement("a");
-
-            link.href = `/${calendario.ano}/${calendario.uf}.json`;
-            link.textContent = `${calendario.ano} / ${calendario.uf} - ${calendario.cobertura} (${calendario.total} eventos)`;
-
+            link.href = `/${caminho}`;
+            link.textContent = `${calendario.ano} / ${calendario.uf} / ${escopo} — ${calendario.cobertura} (${calendario.total} eventos)`;
             item.appendChild(link);
             lista.appendChild(item);
         }

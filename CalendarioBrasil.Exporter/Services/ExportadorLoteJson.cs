@@ -1,4 +1,5 @@
-﻿using CalendarioBrasil.Application.Interfaces;
+﻿using CalendarioBrasil.Application.Constants;
+using CalendarioBrasil.Application.Interfaces;
 using CalendarioBrasil.Domain.ValueObjects;
 using CalendarioBrasil.Exporter.Models;
 using System;
@@ -13,20 +14,27 @@ namespace CalendarioBrasil.Exporter.Services
         private const int MaximoAnosPorLote = 20;
         private readonly IEventosService _eventosService;
         private readonly ExportadorCalendarioJson _exportador;
+        private readonly ExportadorRegistrosDatabricks _exportadorDatabricks;
         private readonly TimeProvider _relogio;
 
         public ExportadorLoteJson(IEventosService eventosService, ExportadorCalendarioJson exportador, TimeProvider? relogio = null)
         {
             _eventosService = eventosService ?? throw new ArgumentNullException(nameof(eventosService));
             _exportador = exportador ?? throw new ArgumentNullException(nameof(exportador));
+            _exportadorDatabricks = new ExportadorRegistrosDatabricks();
             _relogio = relogio ?? TimeProvider.System;
         }
 
-        public async Task<ManifestoCalendarios> ExportarAsync(int anoInicial, int anoFinal, IEnumerable<string> ufs, string diretorioSaida, CancellationToken cancellationToken = default)
+        public Task<ManifestoCalendarios> ExportarAsync(int anoInicial, int anoFinal, IEnumerable<string> ufs, string diretorioSaida, CancellationToken cancellationToken = default)
+        {
+            return ExportarAsync(anoInicial, anoFinal, ufs, diretorioSaida, ["Geral"], false, cancellationToken);
+        }
+
+        public async Task<ManifestoCalendarios> ExportarAsync(int anoInicial, int anoFinal, IEnumerable<string> ufs, string diretorioSaida, IEnumerable<string> escopos, bool incluirDatabricks = false, CancellationToken cancellationToken = default)
         {
             ArgumentNullException.ThrowIfNull(ufs);
+            ArgumentNullException.ThrowIfNull(escopos);
             ArgumentException.ThrowIfNullOrWhiteSpace(diretorioSaida);
-
             _ = new AnoCalendario(anoInicial);
             _ = new AnoCalendario(anoFinal);
 
@@ -52,21 +60,40 @@ namespace CalendarioBrasil.Exporter.Services
                 }
             }
 
+            var nomesEscopos = escopos.ToArray();
+
+            if (nomesEscopos.Length == 0)
+            {
+                throw new ArgumentException("Informe pelo menos um escopo.", nameof(escopos));
+            }
+
+            var escoposNormalizados = nomesEscopos.Select(nome => ConversorEscopoCalendario.Converter(nome)).Distinct().OrderBy(escopo => (int)escopo).Select(escopo => escopo.ToString()).ToArray();
             var diretorio = Path.GetFullPath(diretorioSaida);
             var arquivos = new List<CalendarioPublicado>();
 
             for (int ano = anoInicial; ano <= anoFinal; ano++)
             {
-                foreach (var uf in ufsNormalizadas)
+                foreach (var escopo in escoposNormalizados)
                 {
-                    cancellationToken.ThrowIfCancellationRequested();
+                    foreach (var uf in ufsNormalizadas)
+                    {
+                        cancellationToken.ThrowIfCancellationRequested();
+                        var calendario = _eventosService.ObterPorAnoEUf(ano, uf, escopo: escopo);
+                        var caminho = await _exportador.ExportarAsync(calendario, diretorio, cancellationToken);
+                        var hash = await CalcularHashAsync(caminho, cancellationToken);
+                        string? arquivoDatabricks = null;
+                        string? hashDatabricks = null;
 
-                    var calendario = _eventosService.ObterPorAnoEUf(ano, uf);
-                    var caminho = await _exportador.ExportarAsync(calendario, diretorio, cancellationToken);
-                    var conteudo = await File.ReadAllBytesAsync(caminho, cancellationToken);
-                    var sha256 = Convert.ToHexString(SHA256.HashData(conteudo)).ToLowerInvariant();
+                        if (incluirDatabricks)
+                        {
+                            var caminhoDatabricks = await _exportadorDatabricks.ExportarAsync(calendario, diretorio, cancellationToken);
+                            arquivoDatabricks = Path.GetRelativePath(diretorio, caminhoDatabricks).Replace('\\', '/');
+                            hashDatabricks = await CalcularHashAsync(caminhoDatabricks, cancellationToken);
+                        }
 
-                    arquivos.Add(new CalendarioPublicado(ano, uf, $"{ano}/{uf}.json", calendario.Cobertura, calendario.Total, sha256));
+                        var relativo = Path.GetRelativePath(diretorio, caminho).Replace('\\', '/');
+                        arquivos.Add(new CalendarioPublicado(ano, uf, relativo, calendario.Cobertura, calendario.Total, hash, escopo, arquivoDatabricks, hashDatabricks));
+                    }
                 }
             }
 
@@ -75,22 +102,25 @@ namespace CalendarioBrasil.Exporter.Services
                 await CopiarRecursoAsync(recurso, diretorio, cancellationToken);
             }
 
-            var manifesto = new ManifestoCalendarios(1, _relogio.GetUtcNow(), arquivos);
-
+            var versao = escoposNormalizados.Length == 1 && escoposNormalizados[0] == "Geral" && !incluirDatabricks ? 1 : 2;
+            var manifesto = new ManifestoCalendarios(versao, _relogio.GetUtcNow(), arquivos);
             await GravadorJsonAtomico.GravarAsync(Path.Combine(diretorio, "manifest.json"), manifesto, cancellationToken);
-
             return manifesto;
+        }
+
+        private static async Task<string> CalcularHashAsync(string arquivo, CancellationToken cancellationToken)
+        {
+            await using var stream = new FileStream(arquivo, FileMode.Open, FileAccess.Read, FileShare.Read, 81920, true);
+            var hash = await SHA256.HashDataAsync(stream, cancellationToken);
+            return Convert.ToHexString(hash).ToLowerInvariant();
         }
 
         private static async Task CopiarRecursoAsync(string nome, string diretorio, CancellationToken cancellationToken)
         {
             var assembly = typeof(ExportadorLoteJson).Assembly;
             var nomeRecurso = $"CalendarioBrasil.Exporter.Site.{nome}";
-
             using var origem = assembly.GetManifestResourceStream(nomeRecurso) ?? throw new InvalidOperationException($"Recurso não encontrado: {nomeRecurso}");
-
             Directory.CreateDirectory(diretorio);
-
             var destino = Path.Combine(diretorio, nome);
             var temporario = Path.Combine(diretorio, $".{Guid.NewGuid():N}.tmp");
 

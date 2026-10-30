@@ -1,4 +1,4 @@
-﻿using System.Globalization;
+﻿using CalendarioBrasil.Application.Constants;
 using CalendarioBrasil.Application.Interfaces;
 using CalendarioBrasil.Application.Services;
 using CalendarioBrasil.Domain.Interfaces;
@@ -6,6 +6,7 @@ using CalendarioBrasil.Domain.Services;
 using CalendarioBrasil.Exporter.Services;
 using CalendarioBrasil.Infrastructure.Calendarios;
 using CalendarioBrasil.Infrastructure.Catalogos;
+using System.Globalization;
 
 namespace CalendarioBrasil.Exporter
 {
@@ -16,15 +17,15 @@ namespace CalendarioBrasil.Exporter
             try
             {
                 var parametros = LerParametros(args);
-
-                bool individual = parametros.Count == 3 && parametros.ContainsKey("--ano") && parametros.ContainsKey("--uf") && parametros.ContainsKey("--saida");
-                bool lote = parametros.Count == 4 && parametros.ContainsKey("--ano-inicial") && parametros.ContainsKey("--ano-final") && parametros.ContainsKey("--ufs") && parametros.ContainsKey("--saida");
+                bool individual = parametros.ContainsKey("--ano") && parametros.ContainsKey("--uf") && parametros.ContainsKey("--saida") && !parametros.ContainsKey("--ano-inicial") && !parametros.ContainsKey("--ano-final") && !parametros.ContainsKey("--ufs") && !parametros.ContainsKey("--escopos");
+                bool lote = parametros.ContainsKey("--ano-inicial") && parametros.ContainsKey("--ano-final") && parametros.ContainsKey("--ufs") && parametros.ContainsKey("--saida") && !parametros.ContainsKey("--ano") && !parametros.ContainsKey("--uf") && !parametros.ContainsKey("--escopo");
 
                 if (!individual && !lote)
                 {
-                    throw new ArgumentException("Informe os argumentos de uma exportação individual ou em lote.");
+                    throw new ArgumentException("Informe uma exportação individual ou em lote, sem misturar os argumentos.");
                 }
 
+                bool incluirDatabricks = parametros.TryGetValue("--databricks", out var opcao) && ObterBooleano(opcao);
                 var calculadoraMoveis = new CalculadoraDatasMoveis();
                 IGeradorFeriadosEstaduais geradorEstadual = new GeradorFeriadosEstaduais(calculadoraMoveis);
                 ICatalogoEventosComplementares catalogo = new CatalogoEventosComplementares(calculadoraMoveis, new CalculadoraDatasRecorrentes());
@@ -34,32 +35,38 @@ namespace CalendarioBrasil.Exporter
                 if (individual)
                 {
                     int ano = ObterAno(parametros, "--ano");
-                    var arquivo = await exportador.ExportarAsync(ano, parametros["--uf"], parametros["--saida"]);
-
+                    var escopo = ConversorEscopoCalendario.Converter(parametros.GetValueOrDefault("--escopo", "Geral")).ToString();
+                    var calendario = eventosService.ObterPorAnoEUf(ano, parametros["--uf"], escopo: escopo);
+                    var arquivo = await exportador.ExportarAsync(calendario, parametros["--saida"]);
                     Console.WriteLine($"Arquivo gerado: {arquivo}");
+
+                    if (incluirDatabricks)
+                    {
+                        var arquivoDados = await new ExportadorRegistrosDatabricks().ExportarAsync(calendario, parametros["--saida"]);
+                        Console.WriteLine($"Arquivo Databricks: {arquivoDados}");
+                    }
                 }
                 else
                 {
                     int anoInicial = ObterAno(parametros, "--ano-inicial");
                     int anoFinal = ObterAno(parametros, "--ano-final");
                     IEnumerable<string> ufs = string.Equals(parametros["--ufs"], "todas", StringComparison.OrdinalIgnoreCase) ? eventosService.ObterUfsSuportadas() : parametros["--ufs"].Split(',', StringSplitOptions.TrimEntries);
-
+                    IEnumerable<string> escopos = ObterEscopos(parametros.GetValueOrDefault("--escopos", "Geral"));
                     var exportadorLote = new ExportadorLoteJson(eventosService, exportador);
-                    var manifesto = await exportadorLote.ExportarAsync(anoInicial, anoFinal, ufs, parametros["--saida"]);
-
+                    var manifesto = await exportadorLote.ExportarAsync(anoInicial, anoFinal, ufs, parametros["--saida"], escopos, incluirDatabricks);
                     Console.WriteLine($"Calendários gerados: {manifesto.Calendarios.Count}");
+                    Console.WriteLine($"Arquivos Databricks: {manifesto.Calendarios.Count(item => item.ArquivoDatabricks is not null)}");
                     Console.WriteLine($"Manifesto: {Path.Combine(Path.GetFullPath(parametros["--saida"]), "manifest.json")}");
                 }
 
-                Console.WriteLine("Atenção: os dados ainda possuem cobertura legal parcial.");
-
+                Console.WriteLine("Atenção: os dados ainda possuem cobertura legal parcial e não estão homologados para uso oficial.");
                 return 0;
             }
             catch (ArgumentException ex)
             {
                 Console.Error.WriteLine($"Parâmetros inválidos: {ex.Message}");
-                Console.Error.WriteLine("Individual: --ano 2027 --uf RJ --saida dist");
-                Console.Error.WriteLine("Lote: --ano-inicial 2027 --ano-final 2030 --ufs todas --saida dist");
+                Console.Error.WriteLine("Individual: --ano 2027 --uf RJ --saida dist [--escopo Geral|ExecutivoEstadual|JudiciarioEstadual] [--databricks true]");
+                Console.Error.WriteLine("Lote: --ano-inicial 2027 --ano-final 2030 --ufs todas --saida dist [--escopos todos] [--databricks true]");
                 return 2;
             }
             catch (IOException ex)
@@ -76,7 +83,7 @@ namespace CalendarioBrasil.Exporter
 
         private static Dictionary<string, string> LerParametros(string[] args)
         {
-            string[] permitidos = ["--ano", "--uf", "--ano-inicial", "--ano-final", "--ufs", "--saida"];
+            string[] permitidos = ["--ano", "--uf", "--ano-inicial", "--ano-final", "--ufs", "--saida", "--escopo", "--escopos", "--databricks"];
 
             if (args.Length == 0 || args.Length % 2 != 0)
             {
@@ -104,6 +111,26 @@ namespace CalendarioBrasil.Exporter
             }
 
             return ano;
+        }
+
+        private static bool ObterBooleano(string texto)
+        {
+            if (!bool.TryParse(texto, out bool valor))
+            {
+                throw new ArgumentException("O argumento --databricks deve ser true ou false.");
+            }
+
+            return valor;
+        }
+
+        private static IEnumerable<string> ObterEscopos(string texto)
+        {
+            if (string.Equals(texto, "todos", StringComparison.OrdinalIgnoreCase))
+            {
+                return ["Geral", "ExecutivoEstadual", "JudiciarioEstadual"];
+            }
+
+            return texto.Split(',', StringSplitOptions.TrimEntries);
         }
     }
 }
