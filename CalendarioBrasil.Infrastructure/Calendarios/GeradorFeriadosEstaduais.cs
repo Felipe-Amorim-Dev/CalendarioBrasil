@@ -59,18 +59,28 @@ namespace CalendarioBrasil.Infrastructure.Calendarios
             }
 
             var pascoa = _calculadora.Calcular(ano).Pascoa;
-            var feriados = new List<Feriado>();
+            var ocorrencias = new List<(RegraFeriadoEstadual Regra, DateOnly Original, DateOnly Prevista)>();
 
             foreach (var regra in regras)
             {
-                var data = regra.CalcularData(ano.Valor, pascoa);
+                var original = regra.CalcularDataOriginal(ano.Valor, pascoa);
 
-                if (!regra.EstaVigente(data))
+                if (!regra.EstaVigente(original))
                 {
                     continue;
                 }
 
-                feriados.Add(new Feriado(regra.Codigo, regra.Nome, data, AbrangenciaFeriado.Estadual, ufNormalizada, regra.FundamentoLegal));
+                var prevista = regra.CalcularData(ano.Valor, pascoa);
+                ocorrencias.Add((regra, original, prevista));
+            }
+
+            var datas = ResolvedorTransferenciasEstaduais.Resolver(ano, ocorrencias);
+            var feriados = new List<Feriado>();
+
+            foreach (var ocorrencia in ocorrencias)
+            {
+                var data = datas[ocorrencia.Regra.Codigo];
+                feriados.Add(new Feriado(ocorrencia.Regra.Codigo, ocorrencia.Regra.Nome, data, AbrangenciaFeriado.Estadual, ufNormalizada, ocorrencia.Regra.FundamentoLegal));
             }
 
             return feriados.OrderBy(feriado => feriado.Data).ThenBy(feriado => feriado.Codigo).ToArray();
@@ -189,6 +199,9 @@ namespace CalendarioBrasil.Infrastructure.Calendarios
 
                         "DataFixaTransferidaDomingo" when item.Mes.HasValue && item.Dia.HasValue && !item.DeslocamentoPascoa.HasValue =>
                             RegraFeriadoEstadual.FixaTransferidaDomingo(item.Codigo, item.Nome, item.Mes.Value, item.Dia.Value, item.VigenciaInicio, item.FundamentoLegal, item.VigenciaFim, item.InicioEvidencia),
+
+                        "DataFixaTransferidaSexta" when item.Mes.HasValue && item.Dia.HasValue && !item.DeslocamentoPascoa.HasValue =>
+                            RegraFeriadoEstadual.FixaTransferidaSexta(item.Codigo, item.Nome, item.Mes.Value, item.Dia.Value, item.VigenciaInicio, item.FundamentoLegal, item.VigenciaFim, item.InicioEvidencia),
 
                         _ => throw new InvalidDataException($"Regra inválida no catálogo {recurso}: {item.Codigo}.")
                     };

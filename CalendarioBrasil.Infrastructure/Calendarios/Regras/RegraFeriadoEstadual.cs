@@ -7,6 +7,7 @@ namespace CalendarioBrasil.Infrastructure.Calendarios.Regras
     internal sealed record RegraFeriadoEstadual(string Codigo, string Nome, int? Mes, int? Dia, int? DeslocamentoPascoa, DateOnly? VigenciaInicio, DateOnly? VigenciaFim, string FundamentoLegal, DateOnly? InicioEvidencia)
     {
         public bool TransferirDomingoSeguinte { get; init; }
+        public bool TransferirSextaFeira { get; init; }
 
         public static RegraFeriadoEstadual Fixa(string codigo, string nome, int mes, int dia, DateOnly? inicio, string fundamentoLegal, DateOnly? fim = null, DateOnly? inicioEvidencia = null)
         {
@@ -41,18 +42,33 @@ namespace CalendarioBrasil.Infrastructure.Calendarios.Regras
             return Fixa(codigo, nome, mes, dia, inicio, fundamentoLegal, fim, inicioEvidencia) with { TransferirDomingoSeguinte = true };
         }
 
-        public DateOnly CalcularData(int ano, DateOnly pascoa)
+        public static RegraFeriadoEstadual FixaTransferidaSexta(string codigo, string nome, int mes, int dia, DateOnly? inicio, string fundamentoLegal, DateOnly? fim = null, DateOnly? inicioEvidencia = null)
+        {
+            return Fixa(codigo, nome, mes, dia, inicio, fundamentoLegal, fim, inicioEvidencia) with { TransferirSextaFeira = true };
+        }
+
+        public DateOnly CalcularDataOriginal(int ano, DateOnly pascoa)
         {
             if (DeslocamentoPascoa.HasValue)
             {
                 return pascoa.AddDays(DeslocamentoPascoa.Value);
             }
 
-            var data = new DateOnly(ano, Mes!.Value, Dia!.Value);
+            return new DateOnly(ano, Mes!.Value, Dia!.Value);
+        }
+
+        public DateOnly CalcularData(int ano, DateOnly pascoa)
+        {
+            var data = CalcularDataOriginal(ano, pascoa);
 
             if (TransferirDomingoSeguinte && data.DayOfWeek >= DayOfWeek.Monday && data.DayOfWeek <= DayOfWeek.Friday)
             {
                 return data.AddDays(7 - (int)data.DayOfWeek);
+            }
+
+            if (TransferirSextaFeira && data.DayOfWeek >= DayOfWeek.Tuesday && data.DayOfWeek <= DayOfWeek.Thursday)
+            {
+                return data.AddDays((int)DayOfWeek.Friday - (int)data.DayOfWeek);
             }
 
             return data;
