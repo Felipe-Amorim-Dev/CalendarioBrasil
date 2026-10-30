@@ -44,7 +44,7 @@ namespace CalendarioBrasil.Application.Services
                 .DistinctBy(feriado => (feriado.Codigo, feriado.Data, feriado.Abrangencia, feriado.Uf))
                 .OrderBy(feriado => feriado.Data)
                 .ThenBy(feriado => feriado.Codigo)
-                .Select(feriado => new FeriadoDto(feriado.Codigo, feriado.Nome, feriado.Data, feriado.Abrangencia.ToString(), feriado.Uf, feriado.FundamentoLegal))
+                .Select(feriado => new FeriadoDto(feriado.Codigo, feriado.Nome, feriado.Data, feriado.Abrangencia.ToString(), feriado.Uf, feriado.FundamentoLegal, feriado.Transferido ? feriado.DataOriginal : null, feriado.Transferido))
                 .ToArray();
 
             string[] limitacoes =
@@ -53,7 +53,10 @@ namespace CalendarioBrasil.Application.Services
                 "A cobertura legal ainda é parcial e não inclui todos os feriados municipais e eventos aplicáveis."
             ];
 
-            return new CalendarioFeriadosDto(anoCalendario.Valor, ufNormalizada, "Parcial", feriados.Length, feriados, limitacoes);
+            return new CalendarioFeriadosDto(anoCalendario.Valor, ufNormalizada, "Parcial", feriados.Length, feriados, limitacoes)
+            {
+                Alertas = AnalisadorSobreposicoes.AnalisarFeriados(feriados)
+            };
         }
     }
 }

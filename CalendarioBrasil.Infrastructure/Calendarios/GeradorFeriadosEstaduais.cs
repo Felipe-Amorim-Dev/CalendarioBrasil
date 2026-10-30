@@ -80,7 +80,7 @@ namespace CalendarioBrasil.Infrastructure.Calendarios
             foreach (var ocorrencia in ocorrencias)
             {
                 var data = datas[ocorrencia.Regra.Codigo];
-                feriados.Add(new Feriado(ocorrencia.Regra.Codigo, ocorrencia.Regra.Nome, data, AbrangenciaFeriado.Estadual, ufNormalizada, ocorrencia.Regra.FundamentoLegal));
+                feriados.Add(new Feriado(ocorrencia.Regra.Codigo, ocorrencia.Regra.Nome, data, AbrangenciaFeriado.Estadual, ufNormalizada, ocorrencia.Regra.FundamentoLegal, ocorrencia.Original));
             }
 
             return feriados.OrderBy(feriado => feriado.Data).ThenBy(feriado => feriado.Codigo).ToArray();

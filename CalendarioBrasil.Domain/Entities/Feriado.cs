@@ -10,11 +10,13 @@ namespace CalendarioBrasil.Domain.Entities
         public string Codigo { get; }
         public string Nome { get; }
         public DateOnly Data { get; }
+        public DateOnly DataOriginal { get; }
+        public bool Transferido => DataOriginal != Data;
         public AbrangenciaFeriado Abrangencia { get; }
         public string? Uf { get; }
         public string FundamentoLegal { get; }
 
-        public Feriado(string codigo, string nome, DateOnly data, AbrangenciaFeriado abrangencia, string? uf, string fundamentoLegal)
+        public Feriado(string codigo, string nome, DateOnly data, AbrangenciaFeriado abrangencia, string? uf, string fundamentoLegal, DateOnly? dataOriginal = null)
         {
             ArgumentException.ThrowIfNullOrWhiteSpace(codigo);
             ArgumentException.ThrowIfNullOrWhiteSpace(nome);
@@ -38,6 +40,7 @@ namespace CalendarioBrasil.Domain.Entities
             Codigo = codigo;
             Nome = nome;
             Data = data;
+            DataOriginal = dataOriginal ?? data;
             Abrangencia = abrangencia;
             Uf = uf;
             FundamentoLegal = fundamentoLegal;

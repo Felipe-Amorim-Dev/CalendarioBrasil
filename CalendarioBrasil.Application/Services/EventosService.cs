@@ -54,7 +54,7 @@ namespace CalendarioBrasil.Application.Services
                 .DistinctBy(evento => (evento.Codigo, evento.Data, evento.Tipo, evento.Esfera, evento.Uf, evento.CodigoMunicipioIbge))
                 .OrderBy(evento => evento.Data)
                 .ThenBy(evento => evento.Codigo)
-                .Select(evento => new EventoCalendarioDto(evento.Codigo, evento.Nome, evento.Data, evento.Tipo.ToString(), evento.Esfera.ToString(), evento.Uf, evento.CodigoMunicipioIbge, evento.FundamentoLegal, evento.VigenciaInicio, evento.VigenciaFim, evento.Observacao))
+                .Select(evento => new EventoCalendarioDto(evento.Codigo, evento.Nome, evento.Data, evento.Tipo.ToString(), evento.Esfera.ToString(), evento.Uf, evento.CodigoMunicipioIbge, evento.FundamentoLegal, evento.VigenciaInicio, evento.VigenciaFim, evento.Observacao, evento.Transferido ? evento.DataOriginal : null, evento.Transferido))
                 .ToArray();
 
             var limitacoes = new List<string>
@@ -69,7 +69,10 @@ namespace CalendarioBrasil.Application.Services
                 limitacoes.Add("Pontos facultativos federais aplicam-se somente aos órgãos abrangidos pelas respectivas normas.");
             }
 
-            return new CalendarioEventosDto(anoCalendario.Valor, ufNormalizada, "Parcial", eventos.Length, eventos, limitacoes);
+            return new CalendarioEventosDto(anoCalendario.Valor, ufNormalizada, "Parcial", eventos.Length, eventos, limitacoes)
+            {
+                Alertas = AnalisadorSobreposicoes.AnalisarEventos(eventos)
+            };
         }
 
         private static EventoCalendario ConverterFeriado(Feriado feriado)
@@ -81,7 +84,7 @@ namespace CalendarioBrasil.Application.Services
                 _ => throw new NotSupportedException("A conversão de feriados municipais ainda não está implementada.")
             };
 
-            return new EventoCalendario(feriado.Codigo, feriado.Nome, feriado.Data, TipoEventoCalendario.Feriado, esfera, uf: feriado.Uf, fundamentoLegal: feriado.FundamentoLegal);
+            return new EventoCalendario(feriado.Codigo, feriado.Nome, feriado.Data, TipoEventoCalendario.Feriado, esfera, uf: feriado.Uf, fundamentoLegal: feriado.FundamentoLegal, dataOriginal: feriado.DataOriginal);
         }
     }
 }

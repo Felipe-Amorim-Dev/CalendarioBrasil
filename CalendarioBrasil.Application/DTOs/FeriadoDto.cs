@@ -4,5 +4,5 @@ using System.Text;
 
 namespace CalendarioBrasil.Application.DTOs
 {
-    public sealed record FeriadoDto(string Codigo, string Nome, DateOnly Data, string Abrangencia, string? Uf, string FundamentoLegal);
+    public sealed record FeriadoDto(string Codigo, string Nome, DateOnly Data, string Abrangencia, string? Uf, string FundamentoLegal, DateOnly? DataOriginal = null, bool Transferido = false);
 }

@@ -10,6 +10,8 @@ namespace CalendarioBrasil.Domain.Entities
         public string Codigo { get; }
         public string Nome { get; }
         public DateOnly Data { get; }
+        public DateOnly DataOriginal { get; }
+        public bool Transferido => DataOriginal != Data;
         public TipoEventoCalendario Tipo { get; }
         public EsferaAplicacaoEvento Esfera { get; }
         public string? Uf { get; }
@@ -19,7 +21,7 @@ namespace CalendarioBrasil.Domain.Entities
         public DateOnly? VigenciaFim { get; }
         public string? Observacao { get; }
 
-        public EventoCalendario(string codigo, string nome, DateOnly data, TipoEventoCalendario tipo, EsferaAplicacaoEvento esfera, string? uf = null, string? codigoMunicipioIbge = null, string? fundamentoLegal = null, DateOnly? vigenciaInicio = null, DateOnly? vigenciaFim = null, string? observacao = null)
+        public EventoCalendario(string codigo, string nome, DateOnly data, TipoEventoCalendario tipo, EsferaAplicacaoEvento esfera, string? uf = null, string? codigoMunicipioIbge = null, string? fundamentoLegal = null, DateOnly? vigenciaInicio = null, DateOnly? vigenciaFim = null, string? observacao = null, DateOnly? dataOriginal = null)
         {
             ArgumentException.ThrowIfNullOrWhiteSpace(codigo);
             ArgumentException.ThrowIfNullOrWhiteSpace(nome);
@@ -81,6 +83,7 @@ namespace CalendarioBrasil.Domain.Entities
             Codigo = codigo.Trim();
             Nome = nome.Trim();
             Data = data;
+            DataOriginal = dataOriginal ?? data;
             Tipo = tipo;
             Esfera = esfera;
             Uf = uf?.Trim().ToUpperInvariant();
