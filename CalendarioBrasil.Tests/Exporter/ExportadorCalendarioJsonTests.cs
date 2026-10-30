@@ -87,7 +87,7 @@ namespace CalendarioBrasil.Tests.Exporter
         {
             var exportador = new ExportadorCalendarioJson(CriarService());
 
-            await Assert.ThrowsAsync<ArgumentException>(() => exportador.ExportarAsync(2027, "SP", "dist"));
+            await Assert.ThrowsAsync<ArgumentException>(() => exportador.ExportarAsync(2027, "XX", "dist"));
         }
 
         [Fact]

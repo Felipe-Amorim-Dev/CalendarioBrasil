@@ -15,8 +15,9 @@ namespace CalendarioBrasil.Domain.Entities
         public AbrangenciaFeriado Abrangencia { get; }
         public string? Uf { get; }
         public string FundamentoLegal { get; }
+        public SituacaoDataFeriado SituacaoData { get; }
 
-        public Feriado(string codigo, string nome, DateOnly data, AbrangenciaFeriado abrangencia, string? uf, string fundamentoLegal, DateOnly? dataOriginal = null)
+        public Feriado(string codigo, string nome, DateOnly data, AbrangenciaFeriado abrangencia, string? uf, string fundamentoLegal, DateOnly? dataOriginal = null, SituacaoDataFeriado situacaoData = SituacaoDataFeriado.Calculada)
         {
             ArgumentException.ThrowIfNullOrWhiteSpace(codigo);
             ArgumentException.ThrowIfNullOrWhiteSpace(nome);
@@ -37,6 +38,11 @@ namespace CalendarioBrasil.Domain.Entities
                 throw new ArgumentException("Feriados regionais devem possuir UF.", nameof(uf));
             }
 
+            if (!Enum.IsDefined(situacaoData))
+            {
+                throw new ArgumentOutOfRangeException(nameof(situacaoData));
+            }
+
             Codigo = codigo;
             Nome = nome;
             Data = data;
@@ -44,6 +50,7 @@ namespace CalendarioBrasil.Domain.Entities
             Abrangencia = abrangencia;
             Uf = uf;
             FundamentoLegal = fundamentoLegal;
+            SituacaoData = situacaoData;
         }
     }
 }

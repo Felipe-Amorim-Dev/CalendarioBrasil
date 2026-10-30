@@ -14,7 +14,7 @@ namespace CalendarioBrasil.Infrastructure.Calendarios
     public sealed class GeradorFeriadosEstaduais : IGeradorFeriadosEstaduais
     {
         private const string PrefixoRecursos = "CalendarioBrasil.Infrastructure.Catalogos.Estaduais.";
-        private readonly IReadOnlyDictionary<string, AuditoriaEstadualJson?> _auditorias;
+        private readonly IReadOnlyDictionary<(string Uf, int Ano), IReadOnlyList<ExcecaoDataEstadual>> _excecoes;
 
         private static readonly HashSet<string> UfsBrasileiras = new(StringComparer.Ordinal)
         {
@@ -31,6 +31,7 @@ namespace CalendarioBrasil.Infrastructure.Calendarios
 
         private readonly CalculadoraDatasMoveis _calculadora;
         private readonly IReadOnlyDictionary<string, IReadOnlyList<RegraFeriadoEstadual>> _catalogos;
+        private readonly IReadOnlyDictionary<string, AuditoriaEstadualJson?> _auditorias;
 
         public GeradorFeriadosEstaduais(CalculadoraDatasMoveis calculadora)
         {
@@ -39,6 +40,7 @@ namespace CalendarioBrasil.Infrastructure.Calendarios
             var auditorias = new Dictionary<string, AuditoriaEstadualJson?>(StringComparer.Ordinal);
             _catalogos = CarregarCatalogos(auditorias);
             _auditorias = auditorias;
+            _excecoes = CarregadorExcecoesAnuais.Carregar(_catalogos, _calculadora);
         }
 
         public IReadOnlyList<string> ObterUfsDisponiveis()
@@ -74,13 +76,16 @@ namespace CalendarioBrasil.Infrastructure.Calendarios
                 ocorrencias.Add((regra, original, prevista));
             }
 
-            var datas = ResolvedorTransferenciasEstaduais.Resolver(ano, ocorrencias);
+            IReadOnlyList<ExcecaoDataEstadual> excecoes = _excecoes.TryGetValue((ufNormalizada, ano.Valor), out var cadastradas) ? cadastradas : [];
+
+            var datas = ResolvedorTransferenciasEstaduais.Resolver(ano, ocorrencias, excecoes);
             var feriados = new List<Feriado>();
 
             foreach (var ocorrencia in ocorrencias)
             {
-                var data = datas[ocorrencia.Regra.Codigo];
-                feriados.Add(new Feriado(ocorrencia.Regra.Codigo, ocorrencia.Regra.Nome, data, AbrangenciaFeriado.Estadual, ufNormalizada, ocorrencia.Regra.FundamentoLegal, ocorrencia.Original));
+                var resultado = datas[ocorrencia.Regra.Codigo];
+
+                feriados.Add(new Feriado(ocorrencia.Regra.Codigo, ocorrencia.Regra.Nome, resultado.Data, AbrangenciaFeriado.Estadual, ufNormalizada, ocorrencia.Regra.FundamentoLegal, ocorrencia.Original, resultado.Situacao));
             }
 
             return feriados.OrderBy(feriado => feriado.Data).ThenBy(feriado => feriado.Codigo).ToArray();
@@ -207,7 +212,7 @@ namespace CalendarioBrasil.Infrastructure.Calendarios
                     };
 
                     regras.Add(regra);
-                    
+
                 }
 
                 if (regras.GroupBy(regra => regra.Codigo, StringComparer.Ordinal).Any(grupo => grupo.Count() > 1))

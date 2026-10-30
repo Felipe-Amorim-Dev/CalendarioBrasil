@@ -14,4 +14,9 @@
 			<LogicalName>CalendarioBrasil.Infrastructure.Catalogos.Estaduais.%(Filename)%(Extension)</LogicalName>
 		</EmbeddedResource>
 	</ItemGroup>
+	<ItemGroup>
+		<EmbeddedResource Include="Catalogos\Excecoes\*.json">
+			<LogicalName>CalendarioBrasil.Infrastructure.Catalogos.Excecoes.%(Filename)%(Extension)</LogicalName>
+		</EmbeddedResource>
+	</ItemGroup>
 </Project>

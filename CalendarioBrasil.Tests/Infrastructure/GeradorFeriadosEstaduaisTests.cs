@@ -87,8 +87,8 @@ namespace CalendarioBrasil.Tests.Infrastructure
         }
 
         [Theory]
-        [InlineData("MG")]
         [InlineData("XX")]
+        [InlineData("ZZ")]
         public void Gerar_QuandoUfNaoCadastrada_DeveLancarExcecao(string uf)
         {
             Assert.Throws<ArgumentException>(() => _gerador.Gerar(new AnoCalendario(2027), uf));

@@ -56,7 +56,7 @@ namespace CalendarioBrasil.Tests.Infrastructure
             var diagnostico = _gerador.ObterDiagnostico("RJ");
 
             Assert.Equal(3, diagnostico.RegrasCadastradas);
-            Assert.Equal("PendenteRevisao", diagnostico.Situacao);
+            Assert.Equal("EmRevisao", diagnostico.Situacao);
             Assert.Empty(diagnostico.RegrasComVigenciaNaoConfirmada);
             Assert.False(diagnostico.Homologado);
         }

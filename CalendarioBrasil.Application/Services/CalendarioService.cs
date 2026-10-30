@@ -1,5 +1,6 @@
 ﻿using CalendarioBrasil.Application.DTOs;
 using CalendarioBrasil.Application.Interfaces;
+using CalendarioBrasil.Domain.Enums;
 using CalendarioBrasil.Domain.Interfaces;
 using CalendarioBrasil.Domain.Services;
 using CalendarioBrasil.Domain.ValueObjects;
@@ -39,19 +40,25 @@ namespace CalendarioBrasil.Application.Services
                 throw new ArgumentException($"A UF {ufNormalizada} ainda não possui catálogo estadual disponível.", nameof(uf));
             }
 
+            var estaduais = _geradorEstadual.Gerar(anoCalendario, ufNormalizada);
             var feriados = _geradorNacional.Gerar(anoCalendario)
-                .Concat(_geradorEstadual.Gerar(anoCalendario, ufNormalizada))
+                .Concat(estaduais)
                 .DistinctBy(feriado => (feriado.Codigo, feriado.Data, feriado.Abrangencia, feriado.Uf))
                 .OrderBy(feriado => feriado.Data)
                 .ThenBy(feriado => feriado.Codigo)
-                .Select(feriado => new FeriadoDto(feriado.Codigo, feriado.Nome, feriado.Data, feriado.Abrangencia.ToString(), feriado.Uf, feriado.FundamentoLegal, feriado.Transferido ? feriado.DataOriginal : null, feriado.Transferido))
+                .Select(feriado => new FeriadoDto(feriado.Codigo, feriado.Nome, feriado.Data, feriado.Abrangencia.ToString(), feriado.Uf, feriado.FundamentoLegal, feriado.Transferido ? feriado.DataOriginal : null, feriado.Transferido, feriado.SituacaoData.ToString()))
                 .ToArray();
 
-            string[] limitacoes =
-            [
+            var limitacoes = new List<string>
+            {
                 "O calendário inclui feriados nacionais fixos e os eventos estaduais cadastrados para a UF.",
                 "A cobertura legal ainda é parcial e não inclui todos os feriados municipais e eventos aplicáveis."
-            ];
+            };
+
+            if (estaduais.Any(feriado => feriado.SituacaoData == SituacaoDataFeriado.PendenteConfirmacao))
+            {
+                limitacoes.Add("Existem feriados estaduais com transferência pendente de confirmação. Para esses registros, a data informada é apenas uma referência provisória, não uma data efetiva confirmada.");
+            }
 
             return new CalendarioFeriadosDto(anoCalendario.Valor, ufNormalizada, "Parcial", feriados.Length, feriados, limitacoes)
             {

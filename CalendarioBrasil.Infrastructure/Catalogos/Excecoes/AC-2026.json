@@ -1,0 +1,38 @@
+{
+  "uf": "AC",
+  "ano": 2026,
+  "excecoes": [
+    {
+      "codigo": "AC_DIA_CATOLICO",
+      "dataOriginal": "2026-01-20",
+      "dataEfetiva": "2026-01-22",
+      "escopo": "ExecutivoEstadual",
+      "fundamentoLegal": "Decreto Estadual nº 11.809/2025 e Lei Estadual nº 2.126/2009",
+      "fonteOficial": "https://legis.ac.gov.br/detalhar/6624-1"
+    },
+    {
+      "codigo": "AC_DIA_CATOLICO",
+      "dataOriginal": "2026-01-20",
+      "dataEfetiva": "2026-01-22",
+      "escopo": "JudiciarioEstadual",
+      "fundamentoLegal": "Calendário TJAC 2026 e Lei Estadual nº 2.126/2009",
+      "fonteOficial": "https://www.tjac.jus.br/adm/calendarios/calendario-2026/"
+    },
+    {
+      "codigo": "AC_TRATADO_PETROPOLIS",
+      "dataOriginal": "2026-11-17",
+      "dataEfetiva": "2026-11-17",
+      "escopo": "ExecutivoEstadual",
+      "fundamentoLegal": "Decreto Estadual nº 11.809/2025, calendário do Poder Executivo",
+      "fonteOficial": "https://legis.ac.gov.br/detalhar/6624-1"
+    },
+    {
+      "codigo": "AC_TRATADO_PETROPOLIS",
+      "dataOriginal": "2026-11-17",
+      "dataEfetiva": "2026-11-19",
+      "escopo": "JudiciarioEstadual",
+      "fundamentoLegal": "Calendário TJAC 2026, Portaria nº 6.569/2025",
+      "fonteOficial": "https://www.tjac.jus.br/adm/calendarios/calendario-2026/"
+    }
+  ]
+}

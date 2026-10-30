@@ -108,7 +108,7 @@ namespace CalendarioBrasil.Tests.Application
         [Fact]
         public void ObterPorAnoEUf_QuandoUfNaoSuportada_DeveLancarExcecao()
         {
-            Assert.Throws<ArgumentException>(() => _service.ObterPorAnoEUf(2027, "SP"));
+            Assert.Throws<ArgumentException>(() => _service.ObterPorAnoEUf(2027, "XX"));
         }
 
         [Fact]

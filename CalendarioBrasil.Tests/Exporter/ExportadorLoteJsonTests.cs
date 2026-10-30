@@ -94,7 +94,7 @@ namespace CalendarioBrasil.Tests.Exporter
         [Fact]
         public async Task ExportarAsync_QuandoUfNaoSuportada_DeveLancarExcecao()
         {
-            await Assert.ThrowsAsync<ArgumentException>(() => CriarExportador().ExportarAsync(2027, 2028, ["RJ", "MG"], "dist"));
+            await Assert.ThrowsAsync<ArgumentException>(() => CriarExportador().ExportarAsync(2027, 2028, ["RJ", "XX"], "dist"));
         }
 
         [Fact]

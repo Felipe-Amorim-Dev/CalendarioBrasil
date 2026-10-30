@@ -20,8 +20,9 @@ namespace CalendarioBrasil.Domain.Entities
         public DateOnly? VigenciaInicio { get; }
         public DateOnly? VigenciaFim { get; }
         public string? Observacao { get; }
+        public SituacaoDataFeriado SituacaoData { get; }
 
-        public EventoCalendario(string codigo, string nome, DateOnly data, TipoEventoCalendario tipo, EsferaAplicacaoEvento esfera, string? uf = null, string? codigoMunicipioIbge = null, string? fundamentoLegal = null, DateOnly? vigenciaInicio = null, DateOnly? vigenciaFim = null, string? observacao = null, DateOnly? dataOriginal = null)
+        public EventoCalendario(string codigo, string nome, DateOnly data, TipoEventoCalendario tipo, EsferaAplicacaoEvento esfera, string? uf = null, string? codigoMunicipioIbge = null, string? fundamentoLegal = null, DateOnly? vigenciaInicio = null, DateOnly? vigenciaFim = null, string? observacao = null, DateOnly? dataOriginal = null, SituacaoDataFeriado situacaoData = SituacaoDataFeriado.Calculada)
         {
             ArgumentException.ThrowIfNullOrWhiteSpace(codigo);
             ArgumentException.ThrowIfNullOrWhiteSpace(nome);
@@ -80,6 +81,11 @@ namespace CalendarioBrasil.Domain.Entities
                 throw new ArgumentException("Código municipal permitido somente para eventos municipais.", nameof(codigoMunicipioIbge));
             }
 
+            if (!Enum.IsDefined(situacaoData))
+            {
+                throw new ArgumentOutOfRangeException(nameof(situacaoData));
+            }
+
             Codigo = codigo.Trim();
             Nome = nome.Trim();
             Data = data;
@@ -92,6 +98,7 @@ namespace CalendarioBrasil.Domain.Entities
             VigenciaInicio = vigenciaInicio;
             VigenciaFim = vigenciaFim;
             Observacao = observacao;
+            SituacaoData = situacaoData;
         }
     }
 }

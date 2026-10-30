@@ -89,14 +89,15 @@ namespace CalendarioBrasil.Tests.Application
         {
             Assert.True(_service.SuportaUf("RJ"));
             Assert.True(_service.SuportaUf("rj"));
-            Assert.False(_service.SuportaUf("SP"));
+            Assert.True(_service.SuportaUf("SP"));
+            Assert.False(_service.SuportaUf("XX"));
             Assert.False(_service.SuportaUf(null));
         }
 
         [Fact]
         public void ObterPorAnoEUf_QuandoUfNaoSuportada_DeveLancarExcecao()
         {
-            Assert.Throws<ArgumentException>(() => _service.ObterPorAnoEUf(2027, "SP"));
+            Assert.Throws<ArgumentException>(() => _service.ObterPorAnoEUf(2027, "XX"));
         }
 
         [Fact]

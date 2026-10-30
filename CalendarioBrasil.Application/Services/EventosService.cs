@@ -43,10 +43,8 @@ namespace CalendarioBrasil.Application.Services
                 throw new ArgumentException($"A UF {ufNormalizada} ainda não possui catálogo estadual disponível.", nameof(uf));
             }
 
-            var feriados = _geradorNacional.Gerar(anoCalendario)
-                .Concat(_geradorEstadual.Gerar(anoCalendario, ufNormalizada))
-                .Select(ConverterFeriado);
-
+            var estaduais = _geradorEstadual.Gerar(anoCalendario, ufNormalizada);
+            var feriados = _geradorNacional.Gerar(anoCalendario).Concat(estaduais).Select(ConverterFeriado);
             var complementares = _catalogoComplementar.Gerar(anoCalendario)
                 .Where(evento => incluirPontosFacultativosFederais || evento.Tipo != TipoEventoCalendario.PontoFacultativo || evento.Esfera != EsferaAplicacaoEvento.AdministracaoPublicaFederal);
 
@@ -54,7 +52,7 @@ namespace CalendarioBrasil.Application.Services
                 .DistinctBy(evento => (evento.Codigo, evento.Data, evento.Tipo, evento.Esfera, evento.Uf, evento.CodigoMunicipioIbge))
                 .OrderBy(evento => evento.Data)
                 .ThenBy(evento => evento.Codigo)
-                .Select(evento => new EventoCalendarioDto(evento.Codigo, evento.Nome, evento.Data, evento.Tipo.ToString(), evento.Esfera.ToString(), evento.Uf, evento.CodigoMunicipioIbge, evento.FundamentoLegal, evento.VigenciaInicio, evento.VigenciaFim, evento.Observacao, evento.Transferido ? evento.DataOriginal : null, evento.Transferido))
+                .Select(evento => new EventoCalendarioDto(evento.Codigo, evento.Nome, evento.Data, evento.Tipo.ToString(), evento.Esfera.ToString(), evento.Uf, evento.CodigoMunicipioIbge, evento.FundamentoLegal, evento.VigenciaInicio, evento.VigenciaFim, evento.Observacao, evento.Transferido ? evento.DataOriginal : null, evento.Transferido, evento.SituacaoData.ToString()))
                 .ToArray();
 
             var limitacoes = new List<string>
@@ -67,6 +65,11 @@ namespace CalendarioBrasil.Application.Services
             if (incluirPontosFacultativosFederais)
             {
                 limitacoes.Add("Pontos facultativos federais aplicam-se somente aos órgãos abrangidos pelas respectivas normas.");
+            }
+
+            if (estaduais.Any(feriado => feriado.SituacaoData == SituacaoDataFeriado.PendenteConfirmacao))
+            {
+                limitacoes.Add("Existem feriados estaduais com transferência pendente de confirmação. Para esses registros, a data informada é apenas uma referência provisória, não uma data efetiva confirmada.");
             }
 
             return new CalendarioEventosDto(anoCalendario.Valor, ufNormalizada, "Parcial", eventos.Length, eventos, limitacoes)
@@ -84,7 +87,7 @@ namespace CalendarioBrasil.Application.Services
                 _ => throw new NotSupportedException("A conversão de feriados municipais ainda não está implementada.")
             };
 
-            return new EventoCalendario(feriado.Codigo, feriado.Nome, feriado.Data, TipoEventoCalendario.Feriado, esfera, uf: feriado.Uf, fundamentoLegal: feriado.FundamentoLegal, dataOriginal: feriado.DataOriginal);
+            return new EventoCalendario(feriado.Codigo, feriado.Nome, feriado.Data, TipoEventoCalendario.Feriado, esfera, uf: feriado.Uf, fundamentoLegal: feriado.FundamentoLegal, dataOriginal: feriado.DataOriginal, situacaoData: feriado.SituacaoData);
         }
     }
 }

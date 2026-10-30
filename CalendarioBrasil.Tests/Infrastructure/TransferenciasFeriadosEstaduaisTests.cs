@@ -1,4 +1,5 @@
-﻿using CalendarioBrasil.Domain.Services;
+﻿using CalendarioBrasil.Domain.Enums;
+using CalendarioBrasil.Domain.Services;
 using CalendarioBrasil.Domain.ValueObjects;
 using CalendarioBrasil.Infrastructure.Calendarios;
 using System;
@@ -12,54 +13,57 @@ namespace CalendarioBrasil.Tests.Infrastructure
         private readonly GeradorFeriadosEstaduais _gerador = new(new CalculadoraDatasMoveis());
 
         [Theory]
-        [InlineData(2026, "AC_DIA_CATOLICO", 1, 22)]
-        [InlineData(2026, "AC_DIA_EVANGELICO", 1, 23)]
-        [InlineData(2026, "AC_TRATADO_PETROPOLIS", 11, 19)]
         [InlineData(2027, "AC_DIA_CATOLICO", 1, 22)]
         [InlineData(2027, "AC_DIA_EVANGELICO", 1, 23)]
         [InlineData(2027, "AC_TRATADO_PETROPOLIS", 11, 19)]
         [InlineData(2028, "AC_DIA_MULHER", 3, 10)]
         [InlineData(2028, "AC_DIA_AMAZONIA", 9, 8)]
-        public void Gerar_DeveAplicarTransferenciasDoAcre(int ano, string codigo, int mes, int dia)
+        public void Gerar_QuandoNaoHaConflito_DeveAplicarRegraPermanente(int ano, string codigo, int mes, int dia)
         {
-            var feriados = _gerador.Gerar(new AnoCalendario(ano), "AC");
+            var feriado = Assert.Single(_gerador.Gerar(new AnoCalendario(ano), "AC"), item => item.Codigo == codigo);
 
-            Assert.Contains(feriados, feriado => feriado.Codigo == codigo && feriado.Data == new DateOnly(ano, mes, dia));
+            Assert.Equal(new DateOnly(ano, mes, dia), feriado.Data);
+            Assert.Equal(SituacaoDataFeriado.Calculada, feriado.SituacaoData);
+        }
+
+        [Theory]
+        [InlineData("AC_DIA_CATOLICO", 1, 20)]
+        [InlineData("AC_TRATADO_PETROPOLIS", 11, 17)]
+        public void Gerar_QuandoHaConflitoEm2026_DeveManterReferenciaEInformarPendencia(string codigo, int mes, int dia)
+        {
+            var feriado = Assert.Single(_gerador.Gerar(new AnoCalendario(2026), "AC"), item => item.Codigo == codigo);
+
+            Assert.Equal(new DateOnly(2026, mes, dia), feriado.Data);
+            Assert.Equal(feriado.DataOriginal, feriado.Data);
+            Assert.False(feriado.Transferido);
+            Assert.Equal(SituacaoDataFeriado.PendenteConfirmacao, feriado.SituacaoData);
         }
 
         [Fact]
-        public void Gerar_QuandoAniversarioDoAcreCaiNaTerca_NaoDeveTransferir()
+        public void Gerar_DevePreservarDiaDoEvangelicoEm2026()
         {
-            var feriados = _gerador.Gerar(new AnoCalendario(2027), "AC");
+            var feriado = Assert.Single(_gerador.Gerar(new AnoCalendario(2026), "AC"), item => item.Codigo == "AC_DIA_EVANGELICO");
 
-            Assert.Contains(feriados, feriado => feriado.Codigo == "AC_ANIVERSARIO_ESTADO" && feriado.Data == new DateOnly(2027, 6, 15));
+            Assert.Equal(new DateOnly(2026, 1, 23), feriado.Data);
+            Assert.Equal(SituacaoDataFeriado.Calculada, feriado.SituacaoData);
+        }
+
+        [Fact]
+        public void Gerar_AniversarioDoAcreNaoDeveSerTransferido()
+        {
+            var feriado = Assert.Single(_gerador.Gerar(new AnoCalendario(2027), "AC"), item => item.Codigo == "AC_ANIVERSARIO_ESTADO");
+
+            Assert.Equal(new DateOnly(2027, 6, 15), feriado.Data);
+            Assert.False(feriado.Transferido);
         }
 
         [Fact]
         public void Gerar_QuandoDataCaiNoDomingo_NaoDeveTransferir()
         {
-            var feriados = _gerador.Gerar(new AnoCalendario(2027), "AC");
+            var feriado = Assert.Single(_gerador.Gerar(new AnoCalendario(2027), "AC"), item => item.Codigo == "AC_DIA_AMAZONIA");
 
-            Assert.Contains(feriados, feriado => feriado.Codigo == "AC_DIA_AMAZONIA" && feriado.Data == new DateOnly(2027, 9, 5));
-        }
-
-        [Fact]
-        public void Gerar_QuandoExistemDoisFeriadosNaSemana_NaoDeveDuplicarDatasEstaduais()
-        {
-            var feriados = _gerador.Gerar(new AnoCalendario(2026), "AC");
-            var janeiro = feriados.Where(feriado => feriado.Codigo is "AC_DIA_CATOLICO" or "AC_DIA_EVANGELICO").ToArray();
-
-            Assert.Equal(2, janeiro.Length);
-            Assert.Equal(2, janeiro.Select(feriado => feriado.Data).Distinct().Count());
-        }
-
-        [Fact]
-        public void Gerar_QuandoConflitaComFeriadoNacional_DevePreservarFeriadoNacional()
-        {
-            var feriados = _gerador.Gerar(new AnoCalendario(2026), "AC");
-            var tratado = Assert.Single(feriados, feriado => feriado.Codigo == "AC_TRATADO_PETROPOLIS");
-
-            Assert.Equal(new DateOnly(2026, 11, 19), tratado.Data);
+            Assert.Equal(new DateOnly(2027, 9, 5), feriado.Data);
+            Assert.False(feriado.Transferido);
         }
 
         [Fact]
@@ -79,7 +83,6 @@ namespace CalendarioBrasil.Tests.Infrastructure
         public void Gerar_NaoDeveAlterarRegrasDosOutrosEstados(string uf, string codigo, int ano, int mes, int dia)
         {
             var feriados = _gerador.Gerar(new AnoCalendario(ano), uf);
-
             Assert.Contains(feriados, feriado => feriado.Codigo == codigo && feriado.Data == new DateOnly(ano, mes, dia));
         }
 
