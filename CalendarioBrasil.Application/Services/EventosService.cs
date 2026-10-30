@@ -1,4 +1,5 @@
-﻿using CalendarioBrasil.Application.DTOs;
+﻿using CalendarioBrasil.Application.Constants;
+using CalendarioBrasil.Application.DTOs;
 using CalendarioBrasil.Application.Interfaces;
 using CalendarioBrasil.Domain.Entities;
 using CalendarioBrasil.Domain.Enums;
@@ -31,27 +32,27 @@ namespace CalendarioBrasil.Application.Services
             return _geradorEstadual.ObterUfsDisponiveis();
         }
 
-        public CalendarioEventosDto ObterPorAnoEUf(int ano, string uf, bool incluirPontosFacultativosFederais = false)
+        public CalendarioEventosDto ObterPorAnoEUf(int ano, string uf, bool incluirPontosFacultativosFederais = false, string escopo = "Geral")
         {
             ArgumentException.ThrowIfNullOrWhiteSpace(uf);
 
             var anoCalendario = new AnoCalendario(ano);
             var ufNormalizada = uf.Trim().ToUpperInvariant();
+            var escopoValidado = ConversorEscopoCalendario.Converter(escopo);
 
             if (!SuportaUf(ufNormalizada))
             {
                 throw new ArgumentException($"A UF {ufNormalizada} ainda não possui catálogo estadual disponível.", nameof(uf));
             }
 
-            var estaduais = _geradorEstadual.Gerar(anoCalendario, ufNormalizada);
+            var estaduais = _geradorEstadual.Gerar(anoCalendario, ufNormalizada, escopoValidado);
             var feriados = _geradorNacional.Gerar(anoCalendario).Concat(estaduais).Select(ConverterFeriado);
             var complementares = _catalogoComplementar.Gerar(anoCalendario)
                 .Where(evento => incluirPontosFacultativosFederais || evento.Tipo != TipoEventoCalendario.PontoFacultativo || evento.Esfera != EsferaAplicacaoEvento.AdministracaoPublicaFederal);
 
             var eventos = feriados.Concat(complementares)
                 .DistinctBy(evento => (evento.Codigo, evento.Data, evento.Tipo, evento.Esfera, evento.Uf, evento.CodigoMunicipioIbge))
-                .OrderBy(evento => evento.Data)
-                .ThenBy(evento => evento.Codigo)
+                .OrderBy(evento => evento.Data).ThenBy(evento => evento.Codigo)
                 .Select(evento => new EventoCalendarioDto(evento.Codigo, evento.Nome, evento.Data, evento.Tipo.ToString(), evento.Esfera.ToString(), evento.Uf, evento.CodigoMunicipioIbge, evento.FundamentoLegal, evento.VigenciaInicio, evento.VigenciaFim, evento.Observacao, evento.Transferido ? evento.DataOriginal : null, evento.Transferido, evento.SituacaoData.ToString()))
                 .ToArray();
 
@@ -64,7 +65,12 @@ namespace CalendarioBrasil.Application.Services
 
             if (incluirPontosFacultativosFederais)
             {
-                limitacoes.Add("Pontos facultativos federais aplicam-se somente aos órgãos abrangidos pelas respectivas normas.");
+                limitacoes.Add("Pontos facultativos federais aplicam-se somente aos órgãos abrangidos pelas respectivas normas, independentemente do escopo estadual consultado.");
+            }
+
+            if (escopoValidado != EscopoCalendarioEstadual.Geral)
+            {
+                limitacoes.Add("O escopo institucional aplica exceções documentadas para o órgão selecionado, mas não inclui automaticamente recessos ou pontos facultativos desse órgão.");
             }
 
             if (estaduais.Any(feriado => feriado.SituacaoData == SituacaoDataFeriado.PendenteConfirmacao))
@@ -74,6 +80,7 @@ namespace CalendarioBrasil.Application.Services
 
             return new CalendarioEventosDto(anoCalendario.Valor, ufNormalizada, "Parcial", eventos.Length, eventos, limitacoes)
             {
+                Escopo = escopoValidado.ToString(),
                 Alertas = AnalisadorSobreposicoes.AnalisarEventos(eventos)
             };
         }

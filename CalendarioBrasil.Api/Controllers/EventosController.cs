@@ -23,7 +23,7 @@ namespace CalendarioBrasil.Api.Controllers
         [ProducesResponseType(typeof(CalendarioEventosDto), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ValidationProblemDetails), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status429TooManyRequests)]
-        public ActionResult<CalendarioEventosDto> Obter([FromQuery, Range(LimitesConsultaCalendario.AnoMinimo, LimitesConsultaCalendario.AnoMaximo)] int ano, [FromQuery, Required, StringLength(2, MinimumLength = 2)] string? uf, [FromQuery] bool incluirPontosFacultativosFederais = false)
+        public ActionResult<CalendarioEventosDto> Obter([FromQuery, Range(LimitesConsultaCalendario.AnoMinimo, LimitesConsultaCalendario.AnoMaximo)] int ano, [FromQuery, Required, StringLength(2, MinimumLength = 2)] string? uf, [FromQuery] bool incluirPontosFacultativosFederais = false, [FromQuery] string escopo = "Geral")
         {
             if (!_service.SuportaUf(uf))
             {
@@ -31,7 +31,13 @@ namespace CalendarioBrasil.Api.Controllers
                 return ValidationProblem(ModelState);
             }
 
-            return Ok(_service.ObterPorAnoEUf(ano, uf!, incluirPontosFacultativosFederais));
+            if (!ConversorEscopoCalendario.TentarConverter(escopo, out _))
+            {
+                ModelState.AddModelError(nameof(escopo), "Escopo inválido. Utilize Geral, ExecutivoEstadual ou JudiciarioEstadual.");
+                return ValidationProblem(ModelState);
+            }
+
+            return Ok(_service.ObterPorAnoEUf(ano, uf!, incluirPontosFacultativosFederais, escopo));
         }
     }
 }

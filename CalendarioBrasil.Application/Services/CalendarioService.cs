@@ -1,4 +1,5 @@
-﻿using CalendarioBrasil.Application.DTOs;
+﻿using CalendarioBrasil.Application.Constants;
+using CalendarioBrasil.Application.DTOs;
 using CalendarioBrasil.Application.Interfaces;
 using CalendarioBrasil.Domain.Enums;
 using CalendarioBrasil.Domain.Interfaces;
@@ -28,24 +29,23 @@ namespace CalendarioBrasil.Application.Services
             return _geradorEstadual.ObterUfsDisponiveis();
         }
 
-        public CalendarioFeriadosDto ObterPorAnoEUf(int ano, string uf)
+        public CalendarioFeriadosDto ObterPorAnoEUf(int ano, string uf, string escopo = "Geral")
         {
             ArgumentException.ThrowIfNullOrWhiteSpace(uf);
 
             var anoCalendario = new AnoCalendario(ano);
             var ufNormalizada = uf.Trim().ToUpperInvariant();
+            var escopoValidado = ConversorEscopoCalendario.Converter(escopo);
 
             if (!SuportaUf(ufNormalizada))
             {
                 throw new ArgumentException($"A UF {ufNormalizada} ainda não possui catálogo estadual disponível.", nameof(uf));
             }
 
-            var estaduais = _geradorEstadual.Gerar(anoCalendario, ufNormalizada);
-            var feriados = _geradorNacional.Gerar(anoCalendario)
-                .Concat(estaduais)
+            var estaduais = _geradorEstadual.Gerar(anoCalendario, ufNormalizada, escopoValidado);
+            var feriados = _geradorNacional.Gerar(anoCalendario).Concat(estaduais)
                 .DistinctBy(feriado => (feriado.Codigo, feriado.Data, feriado.Abrangencia, feriado.Uf))
-                .OrderBy(feriado => feriado.Data)
-                .ThenBy(feriado => feriado.Codigo)
+                .OrderBy(feriado => feriado.Data).ThenBy(feriado => feriado.Codigo)
                 .Select(feriado => new FeriadoDto(feriado.Codigo, feriado.Nome, feriado.Data, feriado.Abrangencia.ToString(), feriado.Uf, feriado.FundamentoLegal, feriado.Transferido ? feriado.DataOriginal : null, feriado.Transferido, feriado.SituacaoData.ToString()))
                 .ToArray();
 
@@ -55,6 +55,11 @@ namespace CalendarioBrasil.Application.Services
                 "A cobertura legal ainda é parcial e não inclui todos os feriados municipais e eventos aplicáveis."
             };
 
+            if (escopoValidado != EscopoCalendarioEstadual.Geral)
+            {
+                limitacoes.Add("O escopo institucional aplica exceções documentadas para o órgão selecionado, mas ainda não representa seu calendário administrativo completo, com recessos e pontos facultativos específicos.");
+            }
+
             if (estaduais.Any(feriado => feriado.SituacaoData == SituacaoDataFeriado.PendenteConfirmacao))
             {
                 limitacoes.Add("Existem feriados estaduais com transferência pendente de confirmação. Para esses registros, a data informada é apenas uma referência provisória, não uma data efetiva confirmada.");
@@ -62,6 +67,7 @@ namespace CalendarioBrasil.Application.Services
 
             return new CalendarioFeriadosDto(anoCalendario.Valor, ufNormalizada, "Parcial", feriados.Length, feriados, limitacoes)
             {
+                Escopo = escopoValidado.ToString(),
                 Alertas = AnalisadorSobreposicoes.AnalisarFeriados(feriados)
             };
         }

@@ -34,21 +34,21 @@ namespace CalendarioBrasil.Api.Controllers
         [ProducesResponseType(typeof(CalendarioFeriadosDto), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ValidationProblemDetails), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status429TooManyRequests)]
-        public ActionResult<CalendarioFeriadosDto> Obter([FromQuery, Range(LimitesConsultaCalendario.AnoMinimo, LimitesConsultaCalendario.AnoMaximo)] int ano, [FromQuery, Required, StringLength(2, MinimumLength = 2)] string? uf)
+        public ActionResult<CalendarioFeriadosDto> Obter([FromQuery, Range(LimitesConsultaCalendario.AnoMinimo, LimitesConsultaCalendario.AnoMaximo)] int ano, [FromQuery, Required, StringLength(2, MinimumLength = 2)] string? uf, [FromQuery] string escopo = "Geral")
         {
-            if (string.IsNullOrWhiteSpace(uf))
-            {
-                ModelState.AddModelError(nameof(uf), "A UF é obrigatória.");
-                return ValidationProblem(ModelState);
-            }
-
             if (!_calendarioService.SuportaUf(uf))
             {
                 ModelState.AddModelError(nameof(uf), $"UF ainda não suportada. Disponíveis: {string.Join(", ", _calendarioService.ObterUfsSuportadas())}.");
                 return ValidationProblem(ModelState);
             }
 
-            return Ok(_calendarioService.ObterPorAnoEUf(ano, uf));
+            if (!ConversorEscopoCalendario.TentarConverter(escopo, out _))
+            {
+                ModelState.AddModelError(nameof(escopo), "Escopo inválido. Utilize Geral, ExecutivoEstadual ou JudiciarioEstadual.");
+                return ValidationProblem(ModelState);
+            }
+
+            return Ok(_calendarioService.ObterPorAnoEUf(ano, uf!, escopo));
         }
     }
 }

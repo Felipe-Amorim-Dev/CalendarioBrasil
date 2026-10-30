@@ -9,6 +9,6 @@ namespace CalendarioBrasil.Application.Interfaces
     {
         bool SuportaUf(string? uf);
         IReadOnlyList<string> ObterUfsSuportadas();
-        CalendarioFeriadosDto ObterPorAnoEUf(int ano, string uf);
+        CalendarioFeriadosDto ObterPorAnoEUf(int ano, string uf, string escopo = "Geral");
     }
 }

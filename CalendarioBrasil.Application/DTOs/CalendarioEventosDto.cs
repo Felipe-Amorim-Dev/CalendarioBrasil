@@ -6,6 +6,7 @@ namespace CalendarioBrasil.Application.DTOs
 {
     public sealed record CalendarioEventosDto(int Ano, string Uf, string Cobertura, int Total, IReadOnlyList<EventoCalendarioDto> Eventos, IReadOnlyList<string> Limitacoes)
     {
+        public string Escopo { get; init; } = "Geral";
         public IReadOnlyList<AlertaCalendarioDto> Alertas { get; init; } = [];
     }
 }

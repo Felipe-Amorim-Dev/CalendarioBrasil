@@ -48,10 +48,15 @@ namespace CalendarioBrasil.Infrastructure.Calendarios
             return _catalogos.Keys.OrderBy(uf => uf, StringComparer.Ordinal).ToArray();
         }
 
-        public IReadOnlyList<Feriado> Gerar(AnoCalendario ano, string uf)
+        public IReadOnlyList<Feriado> Gerar(AnoCalendario ano, string uf, EscopoCalendarioEstadual escopo = EscopoCalendarioEstadual.Geral)
         {
             ArgumentNullException.ThrowIfNull(ano);
             ArgumentException.ThrowIfNullOrWhiteSpace(uf);
+
+            if (!Enum.IsDefined(escopo))
+            {
+                throw new ArgumentOutOfRangeException(nameof(escopo));
+            }
 
             var ufNormalizada = uf.Trim().ToUpperInvariant();
 
@@ -78,7 +83,7 @@ namespace CalendarioBrasil.Infrastructure.Calendarios
 
             IReadOnlyList<ExcecaoDataEstadual> excecoes = _excecoes.TryGetValue((ufNormalizada, ano.Valor), out var cadastradas) ? cadastradas : [];
 
-            var datas = ResolvedorTransferenciasEstaduais.Resolver(ano, ocorrencias, excecoes);
+            var datas = ResolvedorTransferenciasEstaduais.Resolver(ano, ocorrencias, excecoes, escopo);
             var feriados = new List<Feriado>();
 
             foreach (var ocorrencia in ocorrencias)
