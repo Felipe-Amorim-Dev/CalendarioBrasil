@@ -32,41 +32,66 @@ namespace CalendarioBrasil.Application.Services
         public CalendarioFeriadosDto ObterPorAnoEUf(int ano, string uf, string escopo = "Geral")
         {
             ArgumentException.ThrowIfNullOrWhiteSpace(uf);
+            return ObterPorAno(ano, [uf], escopo);
+        }
 
+        public CalendarioFeriadosDto ObterPorAno(int ano, IEnumerable<string>? ufs = null, string escopo = "Geral")
+        {
             var anoCalendario = new AnoCalendario(ano);
-            var ufNormalizada = uf.Trim().ToUpperInvariant();
             var escopoValidado = ConversorEscopoCalendario.Converter(escopo);
 
-            if (!SuportaUf(ufNormalizada))
+            var solicitadas = (ufs ?? Array.Empty<string>())
+                .SelectMany(valor => (valor ?? string.Empty).Split(',', StringSplitOptions.None))
+                .Select(valor => valor.Trim().ToUpperInvariant())
+                .ToArray();
+
+            if (solicitadas.Any(uf => uf.Length != 2 || uf.Any(caractere => caractere is < 'A' or > 'Z') || !SuportaUf(uf)))
             {
-                throw new ArgumentException($"A UF {ufNormalizada} ainda não possui catálogo estadual disponível.", nameof(uf));
+                throw new ArgumentException("Uma ou mais UFs informadas são inválidas ou não estão disponíveis.", nameof(ufs));
             }
 
-            var estaduais = _geradorEstadual.Gerar(anoCalendario, ufNormalizada, escopoValidado);
-            var feriados = _geradorNacional.Gerar(anoCalendario).Concat(estaduais)
+            var normalizadas = solicitadas.Distinct(StringComparer.Ordinal).OrderBy(uf => uf, StringComparer.Ordinal).ToArray();
+            var nacionais = _geradorNacional.Gerar(anoCalendario);
+            var estaduais = normalizadas.SelectMany(uf => _geradorEstadual.Gerar(anoCalendario, uf, escopoValidado)).ToArray();
+
+            var feriados = nacionais.Concat(estaduais)
                 .DistinctBy(feriado => (feriado.Codigo, feriado.Data, feriado.Abrangencia, feriado.Uf))
-                .OrderBy(feriado => feriado.Data).ThenBy(feriado => feriado.Codigo)
+                .OrderBy(feriado => feriado.Data)
+                .ThenBy(feriado => feriado.Codigo)
+                .ThenBy(feriado => feriado.Uf)
                 .Select(feriado => new FeriadoDto(feriado.Codigo, feriado.Nome, feriado.Data, feriado.Abrangencia.ToString(), feriado.Uf, feriado.FundamentoLegal, feriado.Transferido ? feriado.DataOriginal : null, feriado.Transferido, feriado.SituacaoData.ToString()))
                 .ToArray();
 
             var limitacoes = new List<string>
             {
-                "O calendário inclui feriados nacionais fixos e os eventos estaduais cadastrados para a UF.",
-                "A cobertura legal ainda é parcial e não inclui todos os feriados municipais e eventos aplicáveis."
+                "A cobertura legal ainda é parcial e não inclui feriados municipais."
             };
 
-            if (escopoValidado != EscopoCalendarioEstadual.Geral)
+            if (normalizadas.Length == 0)
             {
-                limitacoes.Add("O escopo institucional aplica exceções documentadas para o órgão selecionado, mas ainda não representa seu calendário administrativo completo, com recessos e pontos facultativos específicos.");
+                limitacoes.Add("Nenhuma UF informada. A consulta contém somente os feriados nacionais cadastrados.");
+            }
+            else
+            {
+                if (normalizadas.Any(uf => !_geradorEstadual.ObterDiagnostico(uf, ano).Homologado))
+                {
+                    limitacoes.Add("Uma ou mais UFs possuem catálogos estaduais ainda não homologados.");
+                }
+
+                if (escopoValidado != EscopoCalendarioEstadual.Geral)
+                {
+                    limitacoes.Add("O escopo institucional aplica somente as exceções documentadas, não incluindo automaticamente recessos e pontos facultativos.");
+                }
+
+                if (estaduais.Any(feriado => feriado.SituacaoData == SituacaoDataFeriado.PendenteConfirmacao))
+                {
+                    limitacoes.Add("Existem feriados estaduais com transferência de data pendente de confirmação.");
+                }
             }
 
-            if (estaduais.Any(feriado => feriado.SituacaoData == SituacaoDataFeriado.PendenteConfirmacao))
+            return new CalendarioFeriadosDto(ano, normalizadas.Length == 1 ? normalizadas[0] : null, "Parcial", feriados.Length, feriados, limitacoes)
             {
-                limitacoes.Add("Existem feriados estaduais com transferência pendente de confirmação. Para esses registros, a data informada é apenas uma referência provisória, não uma data efetiva confirmada.");
-            }
-
-            return new CalendarioFeriadosDto(anoCalendario.Valor, ufNormalizada, "Parcial", feriados.Length, feriados, limitacoes)
-            {
+                Ufs = normalizadas,
                 Escopo = escopoValidado.ToString(),
                 Alertas = AnalisadorSobreposicoes.AnalisarFeriados(feriados)
             };
