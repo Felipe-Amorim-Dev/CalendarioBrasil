@@ -114,11 +114,15 @@ namespace CalendarioBrasil.Infrastructure.Calendarios
 
             _auditorias.TryGetValue(ufNormalizada, out var auditoria);
 
-            var vigenciasPendentes = regras.Where(regra => !regra.VigenciaInicio.HasValue).Select(regra => regra.Codigo).OrderBy(codigo => codigo, StringComparer.Ordinal).ToArray();
+            var vigenciasPendentes = regras.Where(regra => !regra.VigenciaInicio.HasValue)
+                .Select(regra => regra.Codigo)
+                .OrderBy(codigo => codigo, StringComparer.Ordinal)
+                .ToArray();
 
             bool revisaoAprovada = auditoria?.Situacao == "Aprovada";
-            bool anoValidado = ano.HasValue && auditoria?.AnoInicialValidado <= ano.Value && auditoria?.AnoFinalValidado >= ano.Value;
-            bool homologado = revisaoAprovada && anoValidado && regras.Count > 0 && vigenciasPendentes.Length == 0;
+            bool anoNoPeriodo = ano.HasValue && auditoria?.AnoInicialValidado <= ano.Value && auditoria?.AnoFinalValidado >= ano.Value;
+            bool anoRevisado = ano.HasValue && auditoria?.AnosRevisados.Contains(ano.Value) == true;
+            bool homologado = revisaoAprovada && anoNoPeriodo && anoRevisado && regras.Count > 0 && vigenciasPendentes.Length == 0;
 
             var situacao = regras.Count == 0 ? "SemRegrasCadastradas" : auditoria?.Situacao switch
             {
@@ -148,14 +152,27 @@ namespace CalendarioBrasil.Infrastructure.Calendarios
             {
                 limitacoes.Add("A revisão jurídica do catálogo ainda não foi aprovada.");
             }
-            else if (!anoValidado)
+            else if (!anoNoPeriodo || !anoRevisado)
             {
-                limitacoes.Add("O ano solicitado não está dentro do intervalo validado ou não foi informado.");
+                limitacoes.Add("O ano solicitado não está homologado, não possui revisão explícita ou não foi informado.");
             }
 
             limitacoes.Add("A revisão estadual não abrange automaticamente feriados municipais ou alterações legais posteriores.");
 
-            return new DiagnosticoCatalogoEstadual(ufNormalizada, regras.Count, situacao, homologado, vigenciasPendentes, limitacoes, ano, auditoria?.AnoInicialValidado, auditoria?.AnoFinalValidado, auditoria?.DataRevisao, auditoria?.Responsavel, auditoria?.FontesPorCodigo);
+            return new DiagnosticoCatalogoEstadual(
+                ufNormalizada,
+                regras.Count,
+                situacao,
+                homologado,
+                vigenciasPendentes,
+                limitacoes,
+                ano,
+                auditoria?.AnoInicialValidado,
+                auditoria?.AnoFinalValidado,
+                auditoria?.DataRevisao,
+                auditoria?.Responsavel,
+                auditoria?.FontesPorCodigo,
+                auditoria?.AnosRevisados.OrderBy(valor => valor).ToArray() ?? []);
         }
 
         private static IReadOnlyDictionary<string, IReadOnlyList<RegraFeriadoEstadual>> CarregarCatalogos(Dictionary<string, AuditoriaEstadualJson?> auditorias)

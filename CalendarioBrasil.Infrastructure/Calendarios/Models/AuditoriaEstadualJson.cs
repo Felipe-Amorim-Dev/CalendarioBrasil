@@ -11,6 +11,7 @@ namespace CalendarioBrasil.Infrastructure.Calendarios.Models
         public string? Responsavel { get; init; }
         public int? AnoInicialValidado { get; init; }
         public int? AnoFinalValidado { get; init; }
+        public List<int> AnosRevisados { get; init; } = [];
         public Dictionary<string, string> FontesPorCodigo { get; init; } = new(StringComparer.Ordinal);
         public Dictionary<string, string> FontesConsultadas { get; init; } = new(StringComparer.Ordinal);
         public string? ObservacaoCobertura { get; init; }

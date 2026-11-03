@@ -27,7 +27,20 @@ namespace CalendarioBrasil.Application.Services
 
             var diagnostico = _gerador.ObterDiagnostico(uf, ano);
 
-            return new CoberturaEstadualDto(diagnostico.Uf, diagnostico.RegrasCadastradas, diagnostico.Situacao, diagnostico.Homologado, diagnostico.RegrasComVigenciaNaoConfirmada, diagnostico.Limitacoes, diagnostico.AnoConsultado, diagnostico.AnoInicialValidado, diagnostico.AnoFinalValidado, diagnostico.DataRevisao, diagnostico.Responsavel, diagnostico.FontesPorCodigo);
+            return new CoberturaEstadualDto(
+                diagnostico.Uf,
+                diagnostico.RegrasCadastradas,
+                diagnostico.Situacao,
+                diagnostico.Homologado,
+                diagnostico.RegrasComVigenciaNaoConfirmada,
+                diagnostico.Limitacoes,
+                diagnostico.AnoConsultado,
+                diagnostico.AnoInicialValidado,
+                diagnostico.AnoFinalValidado,
+                diagnostico.DataRevisao,
+                diagnostico.Responsavel,
+                diagnostico.FontesPorCodigo,
+                diagnostico.AnosRevisados);
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using CalendarioBrasil.Infrastructure.Calendarios.Models;
+﻿using CalendarioBrasil.Domain.ValueObjects;
+using CalendarioBrasil.Infrastructure.Calendarios.Models;
 using CalendarioBrasil.Infrastructure.Calendarios.Regras;
 using System;
 using System.Collections.Generic;
@@ -20,9 +21,9 @@ namespace CalendarioBrasil.Infrastructure.Calendarios.Validacoes
                 throw new InvalidDataException($"Situação de auditoria inválida para {uf}.");
             }
 
-            if (auditoria.FontesPorCodigo is null || auditoria.FontesConsultadas is null)
+            if (auditoria.FontesPorCodigo is null || auditoria.FontesConsultadas is null || auditoria.AnosRevisados is null)
             {
-                throw new InvalidDataException($"As fontes documentais do catálogo {uf} não podem ser nulas.");
+                throw new InvalidDataException($"Os metadados documentais do catálogo {uf} não podem ser nulos.");
             }
 
             var codigos = regras.Select(regra => regra.Codigo).ToHashSet(StringComparer.Ordinal);
@@ -53,6 +54,16 @@ namespace CalendarioBrasil.Infrastructure.Calendarios.Validacoes
                 throw new InvalidDataException($"A observação de cobertura de {uf} exige uma fonte documental.");
             }
 
+            if (auditoria.AnosRevisados.Any(ano => ano < AnoCalendario.AnoMinimo || ano > AnoCalendario.AnoMaximo))
+            {
+                throw new InvalidDataException($"O catálogo {uf} possui anos revisados fora do intervalo permitido.");
+            }
+
+            if (auditoria.AnosRevisados.Count != auditoria.AnosRevisados.Distinct().Count())
+            {
+                throw new InvalidDataException($"O catálogo {uf} possui anos revisados duplicados.");
+            }
+
             if (auditoria.Situacao != "Aprovada")
             {
                 return;
@@ -73,9 +84,21 @@ namespace CalendarioBrasil.Infrastructure.Calendarios.Validacoes
                 throw new InvalidDataException($"A data de revisão de {uf} não pode estar no futuro.");
             }
 
-            if (!auditoria.AnoInicialValidado.HasValue || !auditoria.AnoFinalValidado.HasValue || auditoria.AnoInicialValidado.Value < 2024 || auditoria.AnoFinalValidado.Value > 2100 || auditoria.AnoInicialValidado.Value > auditoria.AnoFinalValidado.Value)
+            if (!auditoria.AnoInicialValidado.HasValue || !auditoria.AnoFinalValidado.HasValue ||
+                auditoria.AnoInicialValidado.Value < AnoCalendario.AnoMinimo ||
+                auditoria.AnoFinalValidado.Value > AnoCalendario.AnoMaximo ||
+                auditoria.AnoInicialValidado.Value > auditoria.AnoFinalValidado.Value)
             {
                 throw new InvalidDataException($"O período validado de {uf} é inválido.");
+            }
+
+            var inicio = auditoria.AnoInicialValidado.Value;
+            var fim = auditoria.AnoFinalValidado.Value;
+            var anosEsperados = Enumerable.Range(inicio, fim - inicio + 1).ToArray();
+
+            if (auditoria.AnosRevisados.Count != anosEsperados.Length || anosEsperados.Except(auditoria.AnosRevisados).Any())
+            {
+                throw new InvalidDataException($"O catálogo {uf} possui anos do período validado sem revisão explícita.");
             }
 
             if (regras.Any(regra => !regra.VigenciaInicio.HasValue))
