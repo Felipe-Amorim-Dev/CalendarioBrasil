@@ -134,6 +134,11 @@ namespace CalendarioBrasil.Infrastructure.Calendarios
                 limitacoes.Add("Não existem regras estaduais cadastradas. Isso não comprova ausência de feriados.");
             }
 
+            if (!string.IsNullOrWhiteSpace(auditoria?.ObservacaoCobertura))
+            {
+                limitacoes.Add(auditoria.ObservacaoCobertura);
+            }
+
             if (vigenciasPendentes.Length > 0)
             {
                 limitacoes.Add("Existem regras cuja vigência legal ainda não foi confirmada.");

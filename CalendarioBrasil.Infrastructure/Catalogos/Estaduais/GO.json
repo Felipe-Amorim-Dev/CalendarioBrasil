@@ -2,11 +2,16 @@
   "uf": "GO",
   "feriados": [],
   "auditoria": {
-    "situacao": "Pendente",
+    "situacao": "EmRevisao",
     "dataRevisao": null,
     "responsavel": null,
     "anoInicialValidado": null,
     "anoFinalValidado": null,
-    "fontesPorCodigo": {}
+    "fontesPorCodigo": {},
+    "fontesConsultadas": {
+      "Lei Estadual 20756/2020 - artigo 269": "https://legisla.casacivil.go.gov.br/pesquisa_legislacao/100979/lei-ordinaria-20756",
+      "Lei Federal 9093/1995": "https://www.planalto.gov.br/ccivil_03/leis/l9093.htm"
+    },
+    "observacaoCobertura": "A Lei Estadual 20.756/2020 prevê datas de suspensão do expediente estadual em 26 de julho, 24 de outubro e 28 de outubro, com possibilidade de transferência nos casos previstos. É necessário validar a classificação civil e a abrangência institucional antes de cadastrar essas datas como feriados estaduais gerais. A ausência de regras não comprova ausência de feriados."
   }
 }

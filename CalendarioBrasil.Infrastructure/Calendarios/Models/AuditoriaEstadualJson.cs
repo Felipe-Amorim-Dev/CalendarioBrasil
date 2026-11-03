@@ -12,5 +12,7 @@ namespace CalendarioBrasil.Infrastructure.Calendarios.Models
         public int? AnoInicialValidado { get; init; }
         public int? AnoFinalValidado { get; init; }
         public Dictionary<string, string> FontesPorCodigo { get; init; } = new(StringComparer.Ordinal);
+        public Dictionary<string, string> FontesConsultadas { get; init; } = new(StringComparer.Ordinal);
+        public string? ObservacaoCobertura { get; init; }
     }
 }

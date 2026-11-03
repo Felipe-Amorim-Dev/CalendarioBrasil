@@ -2,11 +2,17 @@
   "uf": "PR",
   "feriados": [],
   "auditoria": {
-    "situacao": "Pendente",
+    "situacao": "EmRevisao",
     "dataRevisao": null,
     "responsavel": null,
     "anoInicialValidado": null,
     "anoFinalValidado": null,
-    "fontesPorCodigo": {}
+    "fontesPorCodigo": {},
+    "fontesConsultadas": {
+      "Lei Estadual 4658/1962": "https://www.legislacao.pr.gov.br/legislacao/listarAtosAno.do?action=exibir&codAto=12494",
+      "Lei Estadual 18384/2014": "https://www.legislacao.pr.gov.br/legislacao/listarAtosAno.do?action=exibirImpressao&codAto=134573",
+      "Decreto Estadual 12134/2025 - calendario 2026": "https://www.legislacao.pr.gov.br/legislacao/listarAtosAno.do?action=exibirImpressao&codAto=379324"
+    },
+    "observacaoCobertura": "O dia 19 de dezembro foi instituído como feriado estadual pela Lei 4.658/1962. A Lei 18.384/2014 revogou essa norma e declarou que a data não constitui feriado civil. O catálogo permanece em revisão para confirmação de outras regras aplicáveis aos anos consultados."
   }
 }

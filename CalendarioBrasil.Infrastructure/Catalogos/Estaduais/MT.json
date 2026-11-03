@@ -2,11 +2,17 @@
   "uf": "MT",
   "feriados": [],
   "auditoria": {
-    "situacao": "Pendente",
+    "situacao": "EmRevisao",
     "dataRevisao": null,
     "responsavel": null,
     "anoInicialValidado": null,
     "anoFinalValidado": null,
-    "fontesPorCodigo": {}
+    "fontesPorCodigo": {},
+    "fontesConsultadas": {
+      "Lei Estadual 7879/2002": "https://www.campinapolis.mt.gov.br/publicacoes/publicacao/7399",
+      "Lei Federal 14759/2023": "https://www2.camara.leg.br/legin/fed/lei/2023/lei-14759-21-dezembro-2023-795091-publicacaooriginal-170522-pl.html",
+      "Decreto Estadual 1787/2025 - calendario 2026": "https://www.iomat.mt.gov.br/legislacao/diario_oficial/detalhes/946226"
+    },
+    "observacaoCobertura": "O dia 20 de novembro foi instituído como feriado estadual pela Lei 7.879/2002 e passou a ser também feriado nacional pela Lei Federal 14.759/2023. O calendário do Executivo de Mato Grosso para 2026 já identifica a data como nacional. A ausência de regra estadual adicional não representa homologação integral do catálogo para outros períodos."
   }
 }
