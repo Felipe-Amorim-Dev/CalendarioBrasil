@@ -6,10 +6,9 @@
       "nome": "Nossa Senhora da Penha",
       "tipoRegra": "RelativaPascoa",
       "deslocamentoPascoa": 8,
-      "vigenciaInicio": null,
+      "vigenciaInicio": "2019-07-04",
       "vigenciaFim": null,
-      "fundamentoLegal": "Lei Estadual nº 11.010/2019, art. 1º, parágrafo único; segunda-feira 8 dias após a Páscoa; publicação a confirmar",
-      "inicioEvidencia": "2024-01-01"
+      "fundamentoLegal": "Lei Estadual nº 11.010/2019, publicada em 04/07/2019, art. 1º e parágrafo único; segunda-feira, oito dias após a Páscoa"
     }
   ],
   "auditoria": {
@@ -19,7 +18,7 @@
     "anoInicialValidado": null,
     "anoFinalValidado": null,
     "fontesPorCodigo": {
-      "ES_NOSSA_SENHORA_PENHA": "https://legislacao.serra.es.gov.br/Arquivo/Documents/legislacao/html/D19082025.html"
+      "ES_NOSSA_SENHORA_PENHA": "https://www.pmbsf.es.gov.br/pagina/ler/1006/feriados-oficiais"
     }
   }
 }
