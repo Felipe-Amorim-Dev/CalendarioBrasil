@@ -1,0 +1,22 @@
+{
+  "uf": "TO",
+  "ano": 2026,
+  "excecoes": [
+    {
+      "codigo": "TO_CRIACAO_ESTADO",
+      "dataOriginal": "2026-10-05",
+      "dataEfetiva": "2026-10-09",
+      "escopo": "Geral",
+      "fundamentoLegal": "Decreto Estadual nº 7.238/2026, art. 1º, publicado no DOE nº 7.149 de 23/09/2026",
+      "fonteOficial": "https://palmas.to.gov.br/core/noticias/rede-municipal-de-ensino-mantem-aulas-no-dia-do-aniversario-do-estado-e-celebra-feriado-no-dia-9/"
+    },
+    {
+      "codigo": "TO_CRIACAO_ESTADO",
+      "dataOriginal": "2026-10-05",
+      "dataEfetiva": "2026-10-05",
+      "escopo": "JudiciarioEstadual",
+      "fundamentoLegal": "Portaria TJTO nº 3.741/2025 e confirmação oficial do Tribunal de Justiça em 29/09/2026",
+      "fonteOficial": "https://tjto.jus.br/comunicacao/noticias/judiciario-tocantinense-mantem-feriado-do-aniversario-do-estado-na-segunda-feira-5-de-outubro"
+    }
+  ]
+}
