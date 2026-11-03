@@ -17,6 +17,9 @@
   <Folder Name="/Infrastructure/">
     <Project Path="CalendarioBrasil.Infrastructure/CalendarioBrasil.Infrastructure.csproj" />
   </Folder>
+  <Folder Name="/Scripts/">
+    <File Path="Validar-Solucao.ps1" />
+  </Folder>
   <Folder Name="/Tests/">
     <Project Path="CalendarioBrasil.Tests/CalendarioBrasil.Tests.csproj" />
   </Folder>
