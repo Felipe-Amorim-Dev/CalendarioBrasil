@@ -21,7 +21,7 @@ namespace CalendarioBrasil.Tests.Application
         public void ObterPorAno_SemUf_DeveRetornarSomenteNacionais(int ano)
         {
             var resultado = _service.ObterPorAno(ano);
-            var nacionais = new GeradorFeriadosNacionaisFixos().Gerar(new AnoCalendario(ano));
+            var nacionais = new GeradorFeriadosNacionais(new GeradorFeriadosNacionaisFixos(), new CalculadoraDatasMoveis()).Gerar(new AnoCalendario(ano));
 
             Assert.Equal(ano, resultado.Ano);
             Assert.Null(resultado.Uf);
@@ -38,7 +38,7 @@ namespace CalendarioBrasil.Tests.Application
 
             Assert.Equal("RJ", resultado.Uf);
             Assert.Equal(["RJ"], resultado.Ufs);
-            Assert.Equal(12, resultado.Total);
+            Assert.Equal(13, resultado.Total);
             Assert.Equal(9, resultado.Feriados.Count(feriado => feriado.Abrangencia == "Nacional"));
             Assert.Equal(3, resultado.Feriados.Count(feriado => feriado.Uf == "RJ"));
         }
@@ -50,7 +50,7 @@ namespace CalendarioBrasil.Tests.Application
 
             Assert.Null(resultado.Uf);
             Assert.Equal(["MG", "RJ", "SP"], resultado.Ufs);
-            Assert.Equal(9, resultado.Feriados.Count(feriado => feriado.Abrangencia == "Nacional"));
+            Assert.Equal(10, resultado.Feriados.Count(feriado => feriado.Abrangencia == "Nacional"));
             Assert.Contains(resultado.Feriados, feriado => feriado.Uf == "RJ");
             Assert.Contains(resultado.Feriados, feriado => feriado.Uf == "SP");
             Assert.Contains(resultado.Feriados, feriado => feriado.Uf == "MG");
@@ -62,7 +62,7 @@ namespace CalendarioBrasil.Tests.Application
             var resultado = _service.ObterPorAno(2027, ["RJ", "SP", "rj"]);
 
             Assert.Equal(["RJ", "SP"], resultado.Ufs);
-            Assert.Equal(9, resultado.Feriados.Count(feriado => feriado.Abrangencia == "Nacional"));
+            Assert.Equal(10, resultado.Feriados.Count(feriado => feriado.Abrangencia == "Nacional"));
             Assert.Equal(3, resultado.Feriados.Count(feriado => feriado.Uf == "RJ"));
             Assert.Equal(1, resultado.Feriados.Count(feriado => feriado.Uf == "SP"));
         }

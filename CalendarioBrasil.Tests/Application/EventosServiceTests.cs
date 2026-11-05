@@ -27,7 +27,7 @@ namespace CalendarioBrasil.Tests.Application
         {
             var resultado = _service.ObterPorAnoEUf(2027, "RJ");
 
-            Assert.Equal(15, resultado.Total);
+            Assert.Equal(16, resultado.Total);
             Assert.Equal(12, resultado.Eventos.Count(evento => evento.Tipo == "Feriado"));
             Assert.Equal(3, resultado.Eventos.Count(evento => evento.Tipo == "DataComemorativa"));
         }
@@ -46,7 +46,7 @@ namespace CalendarioBrasil.Tests.Application
         {
             var resultado = _service.ObterPorAnoEUf(2026, "RJ");
 
-            Assert.Equal(15, resultado.Total);
+            Assert.Equal(16, resultado.Total);
             Assert.DoesNotContain(resultado.Eventos, evento => evento.Tipo == "PontoFacultativo");
         }
 
@@ -55,7 +55,7 @@ namespace CalendarioBrasil.Tests.Application
         {
             var resultado = _service.ObterPorAnoEUf(2026, "RJ", true);
 
-            Assert.Equal(17, resultado.Total);
+            Assert.Equal(18, resultado.Total);
             Assert.Equal(2, resultado.Eventos.Count(evento => evento.Tipo == "PontoFacultativo"));
             Assert.All(resultado.Eventos.Where(evento => evento.Tipo == "PontoFacultativo"), evento => Assert.Equal("AdministracaoPublicaFederal", evento.Esfera));
         }

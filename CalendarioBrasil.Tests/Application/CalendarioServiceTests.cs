@@ -17,7 +17,7 @@ namespace CalendarioBrasil.Tests.Application
         {
             var resultado = _service.ObterPorAnoEUf(2027, "RJ");
 
-            Assert.Equal(12, resultado.Total);
+            Assert.Equal(13, resultado.Total);
             Assert.Equal(9, resultado.Feriados.Count(feriado => feriado.Abrangencia == "Nacional"));
             Assert.Equal(3, resultado.Feriados.Count(feriado => feriado.Abrangencia == "Estadual"));
         }
@@ -45,7 +45,7 @@ namespace CalendarioBrasil.Tests.Application
         {
             var resultado = _service.ObterPorAnoEUf(2025, "RJ");
 
-            Assert.Equal(11, resultado.Total);
+            Assert.Equal(12, resultado.Total);
             Assert.DoesNotContain(resultado.Feriados, feriado => feriado.Codigo == "RJ_CORPUS_CHRISTI");
         }
 

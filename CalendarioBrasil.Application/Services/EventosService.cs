@@ -11,13 +11,13 @@ namespace CalendarioBrasil.Application.Services
 {
     public sealed class EventosService : IEventosService
     {
-        private readonly GeradorFeriadosNacionaisFixos _geradorNacional;
+        private readonly GeradorFeriadosNacionais _geradorNacional;
         private readonly IGeradorFeriadosEstaduais _geradorEstadual;
         private readonly ICatalogoEventosComplementares _catalogoComplementar;
 
         public EventosService(GeradorFeriadosNacionaisFixos geradorNacional, IGeradorFeriadosEstaduais geradorEstadual, ICatalogoEventosComplementares catalogoComplementar)
         {
-            _geradorNacional = geradorNacional ?? throw new ArgumentNullException(nameof(geradorNacional));
+            _geradorNacional = new GeradorFeriadosNacionais(geradorNacional, new CalculadoraDatasMoveis());
             _geradorEstadual = geradorEstadual ?? throw new ArgumentNullException(nameof(geradorEstadual));
             _catalogoComplementar = catalogoComplementar ?? throw new ArgumentNullException(nameof(catalogoComplementar));
         }
@@ -60,7 +60,8 @@ namespace CalendarioBrasil.Application.Services
             {
                 "Cobertura parcial: o catálogo ainda não contém todos os feriados aplicáveis à localidade.",
                 "Feriados municipais e outras regras legais ainda não estão completamente implementados.",
-                "Datas comemorativas não representam automaticamente feriados ou dias não úteis."
+                "Datas comemorativas não representam automaticamente feriados ou dias não úteis.",
+                "A Paixão de Cristo é incluída como referência do calendário nacional; seu enquadramento jurídico como feriado religioso depende de legislação municipal, conforme a Lei nº 9.093/1995, art. 2º."
             };
 
             if (incluirPontosFacultativosFederais)

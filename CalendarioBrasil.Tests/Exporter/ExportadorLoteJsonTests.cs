@@ -40,7 +40,7 @@ namespace CalendarioBrasil.Tests.Exporter
 
                     Assert.True(File.Exists(caminho));
                     Assert.Equal("Parcial", calendario.Cobertura);
-                    Assert.Equal(15, calendario.Total);
+                    Assert.Equal(16, calendario.Total);
 
                     var hash = Convert.ToHexString(SHA256.HashData(await File.ReadAllBytesAsync(caminho))).ToLowerInvariant();
 

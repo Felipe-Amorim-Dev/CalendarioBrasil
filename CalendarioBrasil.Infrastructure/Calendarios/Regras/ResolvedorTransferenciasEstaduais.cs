@@ -26,7 +26,7 @@ namespace CalendarioBrasil.Infrastructure.Calendarios.Regras
                 .ToDictionary(grupo => grupo.Key, grupo => grupo.FirstOrDefault(item => item.Escopo == nomeEscopo) ?? grupo.Single(item => item.Escopo == "Geral"), StringComparer.Ordinal);
 
             var resultados = new Dictionary<string, ResultadoDataEstadual>(StringComparer.Ordinal);
-            var ocupadas = new HashSet<DateOnly>(new GeradorFeriadosNacionaisFixos().Gerar(ano).Select(item => item.Data));
+            var ocupadas = new HashSet<DateOnly>(new GeradorFeriadosNacionais(new GeradorFeriadosNacionaisFixos(), new CalculadoraDatasMoveis()).Gerar(ano).Select(item => item.Data));
             var codigos = ocorrencias.Select(item => item.Regra.Codigo).ToHashSet(StringComparer.Ordinal);
 
             if (selecionadas.Keys.Any(codigo => !codigos.Contains(codigo)))
