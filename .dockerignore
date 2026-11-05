@@ -1,0 +1,17 @@
+.git
+.vs
+**/bin
+**/obj
+**/TestResults
+**/publish
+**/dist
+**/node_modules
+.env
+.env.*
+*.user
+*.suo
+*.log
+*.pfx
+*.p12
+*.snk
+*.zip
