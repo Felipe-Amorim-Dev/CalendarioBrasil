@@ -81,7 +81,7 @@ namespace CalendarioBrasil.Tests.Infrastructure
         [Fact]
         public void Validar_QuandoAnoExcedeLimite_DeveRejeitar()
         {
-            var auditoria = CriarAuditoria(2026, 2027, 2101);
+            var auditoria = CriarAuditoria(2026, 2027, 10000);
 
             Assert.Throws<InvalidDataException>(() => ValidadorAuditoriaEstadual.Validar(auditoria, CriarRegras(), "RJ"));
         }

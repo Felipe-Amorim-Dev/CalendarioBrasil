@@ -79,6 +79,18 @@ namespace CalendarioBrasil.Application.Services
                 limitacoes.Add("Existem feriados estaduais com transferência pendente de confirmação. Para esses registros, a data informada é apenas uma referência provisória, não uma data efetiva confirmada.");
             }
 
+            if (ano < 2024)
+            {
+                limitacoes.Add("Consulta histórica: os feriados nacionais são uma projeção retroativa do catálogo atual e podem não representar a legislação vigente no período.");
+            }
+
+            if (ano > DateTime.UtcNow.Year)
+            {
+                limitacoes.Add("Consulta futura: os eventos são projetados conforme as regras atualmente cadastradas e estão sujeitos a alterações legais.");
+            }
+
+            limitacoes.Add("Os feriados estaduais apresentados são projeções baseadas nas normas cadastradas e estão sujeitos a alterações. Para anos históricos, respeitam-se as vigências ou períodos documentados.");
+
             return new CalendarioEventosDto(anoCalendario.Valor, ufNormalizada, "Parcial", eventos.Length, eventos, limitacoes)
             {
                 Escopo = escopoValidado.ToString(),

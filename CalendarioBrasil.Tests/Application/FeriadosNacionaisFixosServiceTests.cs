@@ -45,7 +45,7 @@ namespace CalendarioBrasil.Tests.Application
         [Fact]
         public void ObterPorAno_QuandoAnoInvalido_DeveLancarExcecao()
         {
-            Assert.Throws<ArgumentOutOfRangeException>(() => _service.ObterPorAno(2023));
+            Assert.Throws<ArgumentOutOfRangeException>(() => _service.ObterPorAno(10000));
         }
     }
 }

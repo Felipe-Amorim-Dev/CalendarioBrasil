@@ -68,12 +68,25 @@ namespace CalendarioBrasil.Application.Services
                 "A Paixão de Cristo é incluída como referência do calendário nacional; seu enquadramento jurídico como feriado religioso depende de legislação municipal, conforme a Lei nº 9.093/1995, art. 2º."
             };
 
+            if (ano < 2024)
+            {
+                limitacoes.Add("Consulta histórica: os feriados nacionais são calculados a partir do catálogo atual. O resultado é uma projeção retroativa e não comprova que todas as datas eram feriados legalmente reconhecidos no ano solicitado.");
+            }
+
+            if (ano > DateTime.UtcNow.Year)
+            {
+                limitacoes.Add("Consulta futura: o calendário é uma projeção das regras atualmente cadastradas e pode sofrer alterações legislativas.");
+            }
+
             if (normalizadas.Length == 0)
             {
                 limitacoes.Add("Nenhuma UF informada. A consulta contém somente os feriados nacionais cadastrados.");
             }
             else
             {
+                limitacoes.Add("Os feriados estaduais apresentados são projeções calculadas com base nas normas atualmente cadastradas e estão sujeitos a alterações legais. Consulte a legislação vigente para confirmação.");
+                limitacoes.Add("Em consultas históricas, as regras estaduais são aplicadas somente dentro das vigências ou períodos documentados. A ausência de registros não comprova a inexistência histórica de feriados.");
+
                 if (normalizadas.Any(uf => !_geradorEstadual.ObterDiagnostico(uf, ano).Homologado))
                 {
                     limitacoes.Add("Uma ou mais UFs possuem catálogos estaduais ainda não homologados.");

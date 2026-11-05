@@ -8,9 +8,13 @@ namespace CalendarioBrasil.Tests.Domain
     public sealed class AnoCalendarioTests
     {
         [Theory]
-        [InlineData(2024)]
-        [InlineData(2027)]
-        [InlineData(2100)]
+        [InlineData(1583)]
+        [InlineData(1900)]
+        [InlineData(2023)]
+        [InlineData(2026)]
+        [InlineData(2101)]
+        [InlineData(2130)]
+        [InlineData(9999)]
         public void Construtor_QuandoAnoValido_DeveCriarInstancia(int ano)
         {
             var resultado = new AnoCalendario(ano);
@@ -19,9 +23,9 @@ namespace CalendarioBrasil.Tests.Domain
         }
 
         [Theory]
-        [InlineData(1900)]
-        [InlineData(2023)]
-        [InlineData(2101)]
+        [InlineData(0)]
+        [InlineData(1582)]
+        [InlineData(10000)]
         public void Construtor_QuandoAnoInvalido_DeveLancarExcecao(int ano)
         {
             Assert.Throws<ArgumentOutOfRangeException>(() => new AnoCalendario(ano));

@@ -95,7 +95,7 @@ namespace CalendarioBrasil.Tests.Exporter
         {
             var exportador = new ExportadorCalendarioJson(CriarService());
 
-            await Assert.ThrowsAsync<ArgumentOutOfRangeException>(() => exportador.ExportarAsync(2023, "RJ", "dist"));
+            await Assert.ThrowsAsync<ArgumentOutOfRangeException>(() => exportador.ExportarAsync(10000, "RJ", "dist"));
         }
     }
 }

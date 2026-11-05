@@ -17,7 +17,7 @@ async function carregarCalendarios() {
         lista.replaceChildren();
 
         for (const calendario of manifesto.calendarios) {
-            if (!calendario || !Number.isInteger(calendario.ano) || calendario.ano < 2024 || calendario.ano > 2100 || !/^[A-Z]{2}$/.test(calendario.uf) || !Number.isInteger(calendario.total)) {
+            if (!calendario || !Number.isInteger(calendario.ano) || calendario.ano < 1583 || calendario.ano > 9999 || !/^[A-Z]{2}$/.test(calendario.uf) || !Number.isInteger(calendario.total)) {
                 continue;
             }
 

@@ -73,7 +73,7 @@ namespace CalendarioBrasil.Tests.Infrastructure
         [Fact]
         public void ObterDiagnostico_QuandoAnoInvalido_DeveLancarExcecao()
         {
-            Assert.Throws<ArgumentOutOfRangeException>(() => _gerador.ObterDiagnostico("RJ", 2101));
+            Assert.Throws<ArgumentOutOfRangeException>(() => _gerador.ObterDiagnostico("RJ", 10000));
         }
 
         [Fact]

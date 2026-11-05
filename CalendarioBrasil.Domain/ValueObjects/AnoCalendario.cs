@@ -6,8 +6,8 @@ namespace CalendarioBrasil.Domain.ValueObjects
 {
     public sealed record AnoCalendario
     {
-        public const int AnoMinimo = 2024;
-        public const int AnoMaximo = 2100;
+        public const int AnoMinimo = 1583;
+        public const int AnoMaximo = 9999;
 
         public int Valor { get; }
 
