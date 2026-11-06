@@ -3,6 +3,7 @@ using CalendarioBrasil.Application.Interfaces;
 using CalendarioBrasil.Application.Services;
 using CalendarioBrasil.Domain.Interfaces;
 using CalendarioBrasil.Domain.Services;
+using CalendarioBrasil.Host.Integrations;
 using CalendarioBrasil.Infrastructure.Calendarios;
 using CalendarioBrasil.Infrastructure.Catalogos;
 using Microsoft.AspNetCore.RateLimiting;
@@ -25,6 +26,11 @@ builder.Services.AddScoped<IFeriadosNacionaisFixosService, FeriadosNacionaisFixo
 builder.Services.AddScoped<ICalendarioService, CalendarioService>();
 builder.Services.AddScoped<IDatasMoveisService, DatasMoveisService>();
 builder.Services.AddScoped<IEventosService, EventosService>();
+
+builder.Services.AddHttpClient<IDatabricksIntegrationService, DatabricksIntegrationService>(client =>
+{
+    client.Timeout = TimeSpan.FromSeconds(15);
+});
 
 builder.Services.AddRateLimiter(options =>
 {
