@@ -9,4 +9,13 @@ services:
     environment:
       ASPNETCORE_ENVIRONMENT: Production
       ASPNETCORE_HTTP_PORTS: "8080"
+    networks:
+      calendariobrasil:
+        aliases:
+          - calendariobrasil-api
     restart: unless-stopped
+
+networks:
+  calendariobrasil:
+    external: true
+    name: calendariobrasil-net
